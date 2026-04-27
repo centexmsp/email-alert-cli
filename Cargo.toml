@@ -1,0 +1,33 @@
+[package]
+name = "email-alert-cli"
+version = "0.1.0"
+edition = "2021"
+description = "Dev/CI: HMAC POST to Cloudflare email-alerts Worker. 1Password op:// refs. Consumer: centexmsp/repository-restructuring."
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/centexmsp/email-alert-cli"
+readme = "README.md"
+default-run = "email-alert"
+
+[lib]
+name = "email_alert"
+path = "src/lib.rs"
+
+[[bin]]
+name = "email-alert"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.5", features = ["derive", "env"] }
+hex = "0.4"
+hmac = "0.12"
+reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "blocking"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+thiserror = "2.0"
+
+[dev-dependencies]
+serde_json = "1.0"
+
+[lints.rust]
+unused_must_use = "deny"
