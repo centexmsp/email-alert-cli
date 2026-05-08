@@ -4,6 +4,11 @@ Standalone **Rust** CLI and library: HMAC-signed `POST` to the [`email-alerts`](
 
 **Repository**: source of truth for this crate. Integrate consumers via **pinned git submodule** or **git dependency** per [SHARED_MODULE_INTEGRATION_STANDARD_SSOT](https://github.com/centexmsp/repository-restructuring/blob/main/docs/SHARED_MODULE_INTEGRATION_STANDARD_SSOT.md).
 
+## Program SSOT
+
+- Program index: <https://github.com/centexmsp/repository-restructuring/blob/main/docs/00_SSOT.md>
+- SSOT quick pointer (this repo): `docs/SSOT_POINTER.md`
+
 ## Install
 
 ```bash
