@@ -40,3 +40,7 @@ Use the **developer** vault in 1Password for dev refs (Cursor: Command Palette â
 ## License
 
 MIT â€” see `LICENSE-MIT`.
+## Wiki
+
+- **This repo's operator-facing pages:** [`wiki/`](wiki/)
+- **Fleet master index** (all centexmsp repos): [`centexmsp/repository-restructuring/wiki/FLEET_REPO_INDEX.md`](https://github.com/centexmsp/repository-restructuring/blob/main/wiki/FLEET_REPO_INDEX.md)
