@@ -1,0 +1,31 @@
+---
+description: Enforce Rust-based Cursor hooks, MCP/shell mutation review, and GitHub-backed policy sync across all instances.
+alwaysApply: true
+---
+
+# Cursor Policy Enforcement
+
+## Mandatory Control Points
+
+1. Treat `.cursor/hooks.json` and `.cursor/hooks/**` as security policy code.
+2. Keep security-critical hook logic in Rust (`.cursor/hooks/devops-command-gate-rs`).
+3. Keep `beforeMCPExecution` fail-closed after validation. **`beforeShellExecution` is not configured in this repo’s `hooks.json`** (Cursor Agent shell is not gated here); still route **`git push`** / **`wrangler deploy`** / IaC applies through **`safe-devops-wrapper`** and Cloudflare preflight by policy—do not treat absence of a shell hook as permission to skip controls.
+4. Route high-risk shell actions through Rust preflight wrapper (`safe-devops-wrapper`).
+5. Never bypass policy by introducing parallel non-reviewed hook scripts.
+
+## GitHub and Cross-Host Sync
+
+- Cursor controls must be committed to GitHub for parity across macOS and RHEL 10.x instances.
+- Changes to `.cursor/**` require corresponding docs updates in SSOT (`docs/CURSOR_*`, **`docs/ONEPASSWORD_*`** when `op` policy moves, and continue prompt).
+- Rust hook binaries are build artifacts and must not be committed (`.cursor/hooks/.gitignore`).
+
+## Review and Validation
+
+- For `.cursor/**` changes, ensure `cursor-policy-guard.yml` passes.
+- Validate:
+  - safe shell command => allow
+  - direct risky shell command => blocked by hook
+  - wrapped risky shell command => preflight + execution
+  - mutating MCP tool => ask/deny per policy
+- New **always-on** rules that constrain operator workflows (e.g. **`onepassword-cli-session-gate.mdc`**) must link a **canonical SSOT** under **`docs/`** — not rules-only prose.
+

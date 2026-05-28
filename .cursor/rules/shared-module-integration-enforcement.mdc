@@ -1,0 +1,30 @@
+---
+description: Enforce standalone shared-module repositories, parity-gated migration, and CI policy wiring for consumer repos.
+alwaysApply: true
+---
+
+# Shared Module Integration Enforcement
+
+## Non-Negotiable Controls
+
+1. Reusable cross-repo modules must be developed in dedicated GitHub repositories.
+2. Consumer repos must integrate shared modules via pinned submodule or pinned git dependency references.
+3. Consumer repos must not keep duplicate source-of-truth copies of shared modules.
+4. Do not retire legacy TS/backup implementations until parity/superiority evidence is documented and validated.
+5. Steganography implementations must never inject payloads into source-controlled files (code/docs/IaC/build assets); allow runtime-channel-only stego handling with explicit validation/sanitization.
+6. Reusable Terraform modules must follow standalone source-of-truth and pinned-consumer-reference controls.
+
+## Required Files
+
+- `docs/SHARED_MODULE_INTEGRATION_STANDARD_SSOT.md` in SSOT.
+- `scripts/verify-standalone-module-policy-presence.sh` to fail when repos with submodules lack policy entries.
+- `.github/policy/standalone-module-policy.txt` in consumer repos that integrate shared modules.
+- `scripts/verify-standalone-module-sourcing.sh` wired through reusable workflow security gates.
+- For stego-capable repos: `.github/policy/stego-source-safety-policy.txt` + `scripts/verify-stego-source-safety.sh` wired through reusable workflow security gates.
+
+## Required Evidence
+
+- Module-level unit and parity fixture tests.
+- Consumer integration test evidence.
+- Security validation evidence.
+- Dashboard + tracker updates in the same change set as integration changes.

@@ -1,0 +1,17 @@
+---
+description: >-
+  New program automation (matrix/breadth runners, Ollama probes, op/materialize helpers)
+  belongs in Rust crates under crates/; bash stays thin wrappers.
+alwaysApply: true
+---
+
+# Rust-first program automation (repo-root)
+
+1. **Canonical prose:** [STANDARDS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/STANDARDS_SSOT.md) **Language Strategy** (Workers + **program automation** bullets); inventory + **`scripts/`** backlog: [RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md) (**§9**, **Appendix A**).
+2. **New automation** — matrix legs, background orchestration, **local Ollama probes**, **`op`/vault resolution**, P0 materialize paths — ships as **Rust** in **`crates/*`** (for example **`background-prompt-sweep`**, **`prompt-context-feedback`**, **`p0-op-materialize`**). **`scripts/*.sh`** remain **thin wrappers** that **`cargo run -p …`** with stable env contracts.
+3. **Do not** add new parallel **Python** orchestration for program automation. **`measure-prompt-context-coverage.py`** is **grandfathered** until a Rust port matches coverage behavior; extend **`background-prompt-sweep`** or **`prompt-context-feedback`** instead.
+4. **Cloudflare Workers** stay under **[rust-edge-workers-preference.mdc](rust-edge-workers-preference.mdc)** (`workers-rs` + **`worker-build`**).
+5. **Bash migration backlog:** every root **`scripts/*.sh`** has a default disposition row in [RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md) **Appendix A** (maintained by **`cargo run -p ssot-shell-register -- generate`**); CI drift: **`cargo run -p ssot-shell-register -- check`** via **`scripts/verify-ssot-program-operating-docs.sh`**. Follow **§9.2** deprecation when Rust replaces a script — **no** long-lived duplicate implementations.
+6. **`.sh` only when necessary:** GitHub **`gh`/Actions** glue, **`wrangler`/`op` subprocess** shims, POSIX **`install-*`** — not new business logic. Justify anything else in the same change set (STANDARDS **Exception path**).
+
+**Background runner SSOT:** [BACKGROUND_TASK_AUTOMATION_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/BACKGROUND_TASK_AUTOMATION_SSOT.md).

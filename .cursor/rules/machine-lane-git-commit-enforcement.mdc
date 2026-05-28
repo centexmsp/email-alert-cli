@@ -1,0 +1,26 @@
+---
+description: Machine-Lane Git commit trailers (m5-macos vs intel-linux); reality-check origin/main before assuming parity; use git-commit-with-machine-lane.sh
+globs:
+alwaysApply: true
+---
+
+# Machine lane Git commit enforcement
+
+**Canonical SSOT:** [docs/MACHINE_LANE_GIT_COMMIT_STANDARD_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/MACHINE_LANE_GIT_COMMIT_STANDARD_SSOT.md)
+
+## Required on every program commit / PR (this repo + consumers)
+
+1. Append the **Machine-Lane trailer block** (see SSOT §1) — use **`./scripts/git-commit-with-machine-lane.sh -m "…"`** from **repository-restructuring**, or **`centex_machine_lane_git_trailer`** from **`scripts/lib-machine-lane-git.sh`** when committing inside a consumer checkout.
+2. **Before substantive work:** `git fetch origin` and inspect **`git log origin/main -5`** on the active repo. Run **`./scripts/audit-intel-github-branches.sh`** when cross-host drift is possible.
+3. **Reality-check:** If **Intel/RHEL** `wip/mobile-rhel10-*` (or another host) has newer **`origin/main`** or a large WIP branch, **do not** treat M5 local state as authoritative — pull, compare, or document explicit deferral in the PR. **Claude Code / other agents** may have committed elsewhere; **verify locally**.
+4. **PR bodies:** include the same trailer under **## Machine context**.
+
+## Lane detection
+
+- **`cargo run -p machine-identity`** → JSON; trailer formatter in **`scripts/lib-machine-lane-git.sh`**.
+
+## Cross-links
+
+- [CURSOR_CROSS_HOST_SYNC_PROTOCOL_2026-04-27.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_CROSS_HOST_SYNC_PROTOCOL_2026-04-27.md)
+- [CONTINUE_PROMPT_M5.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CONTINUE_PROMPT_M5.md)
+- [WIKI_FLEET_ROLLOUT_STATUS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/WIKI_FLEET_ROLLOUT_STATUS_SSOT.md)

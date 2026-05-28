@@ -1,0 +1,26 @@
+{
+  "baseURL": "https://gateway.ai.cloudflare.com/v1/c20c1964256ad6953f87e53bd1678ade/xai-grok-production/compat",
+  "gatewayUrl": "https://gateway.ai.cloudflare.com/v1/c20c1964256ad6953f87e53bd1678ade/xai-grok-production/compat",
+  "apiKey": "env:CLOUDFLARE_AI_GATEWAY_TOKEN",
+  "opRef": "op://developer/Cloudflare Gateway AI bearer token rolled 26MAR26/credential",
+  "opRefAlternates": [
+    "op://developer/dc3hhwsadxe2irj35c55wv32t4/credential"
+  ],
+  "agentContract": "config/cursor-workstation-agent-contract.json",
+  "defaultModel": "grok-build-0.1",
+  "fastModel": "grok-4-fast",
+  "buildModel": "grok-build-0.1",
+  "verifiedChatModels": [
+    "grok-4.3",
+    "grok-4-fast",
+    "grok-build-0.1",
+    "grok/grok-4",
+    "grok/grok-4.3",
+    "grok/grok-4-fast",
+    "grok/grok-build-0.1",
+    "grok/grok-4.20-non-reasoning",
+    "grok/grok-4.20-0309-reasoning",
+    "grok/grok-4.20-0309-non-reasoning"
+  ],
+  "notes": "2026-05-09: Cursor Settings → custom model field rejects ids containing '/' — use bare xAI slug as default. 2026-05-25: **grok-build-0.1 is now the program default** (verified via Gateway as grok/grok-build-0.1 with probe-grok-build-gateway.sh; bare slug for Cursor UI). Fast coding agent model for agentic work + PG migration. Previous default grok-4.3 remains in verified list as fallback. Keep grok/grok-* for scripts. Prior deprecation notes per VENDOR_DOCUMENTATION_FIRST §7.B."
+}

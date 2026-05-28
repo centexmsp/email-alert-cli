@@ -1,0 +1,13 @@
+---
+description: New Cloudflare Workers and edge control-plane code default to Rust (workers-rs); TypeScript Workers are not the default for new services.
+alwaysApply: true
+---
+
+# Rust-first Cloudflare Workers
+
+1. **New Cloudflare Workers** (including alert dispatchers, bridges, and security control-plane entrypoints) MUST be implemented in **Rust** using **`workers-rs`** + **`worker-build`** + global **`wrangler`**, matching patterns such as `service-bridge`, `workers/email-alerts/`, and neutral control-plane trees like `workers/profile-sync-service/` (see `docs/PROFILE_SYNC_CONTROL_PLANE_SSOT.md`).
+2. **Do not** introduce a **TypeScript/JavaScript Worker** as the primary implementation for new edge services unless a short **ADR** exists documenting why Rust is not feasible (same bar as `docs/STANDARDS_SSOT.md` §1 *Exception path*).
+3. When editing any Worker in this program, **check the language**: if the repo already has a Rust Worker pattern, extend Rust; do not add a parallel TS Worker “for speed” without ADR sign-off.
+4. **TS/JS is not forbidden everywhere** — it is **bounded** in `docs/STANDARDS_SSOT.md`: **Wasm/`worker-build` glue**, **vendor-documented JS/TS-only APIs** (today: **Cloudflare Workflows** — see `docs/workers/P0_SECURITY_PIPELINE_WORKFLOW_TYPESCRIPT_ADR.md`), and **legacy/UI** until parity. Prefer Rust for all other edge and control-plane code.
+
+**Canonical detail**: `docs/STANDARDS_SSOT.md` (Language Strategy), `docs/SECURITY_RESEARCH_AND_ALERTING_SSOT.md` §8.3 (`workers/email-alerts`).

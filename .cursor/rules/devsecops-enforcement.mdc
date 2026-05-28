@@ -1,0 +1,76 @@
+---
+description: Enforce CI/DevOps/DevSecOps hard gates, dashboard metrics, and AI-era supply-chain protections across all private repos.
+alwaysApply: true
+---
+
+# DevSecOps Enforcement
+
+## Non-Negotiable Gates
+
+1. Block deployment when mandatory gates fail (build/test/coverage, SAST, secrets, SCA, IaC, workflow hardening). **Layered stack SSOT:** `docs/DEFENSE_IN_DEPTH_SECURITY_STACK_SSOT.md` — extend it when adding or renaming gates (`reusable-mandatory-predeploy`, `reusable-security-gates`, `mandatory-predeploy-gates`, `dependency-review-pr`). **Branch protection:** `docs/GITHUB_BRANCH_PROTECTION_OPERATOR_RUNBOOK_SSOT.md`; operators run `scripts/audit-github-branch-protection-required-checks.sh` and `scripts/github-branch-protection-add-required-contexts.sh` (with `config/github-branch-protection-main.payload.json` for bootstrap `PUT` when needed); record results in `docs/COMPREHENSIVE_PROJECT_STATUS_REPORT.md` when merge policy changes.
+2. Require full-SHA action pinning and least-privilege `permissions:` in every workflow.
+3. Prefer OIDC short-lived credentials over static deploy tokens.
+4. Require SBOM + provenance artifacts for releasable builds.
+5. Require Cloudflare scope guard preflight before mutation/deploy jobs.
+
+**Gate / policy authority (2026-05-25 fleet audit formalization — mandatory "if ANY question" reference)**: See the authoritative [CLOUDFLARE_SECURITY_CONTROLS_MATRIX_AND_GAPS_SSOT.md §4a.4.0 "Program Gate Definition — Single Source of Truth"](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CLOUDFLARE_SECURITY_CONTROLS_MATRIX_AND_GAPS_SSOT.md#4a40-program-gate-definition-single-source-of-truth) (two-layer 80%/95% model + Master Cross-Domain Gate Table + 18-item pre-boarding checklist; full 2026-05-25 decisions: ADR-0027/0028 staged, G30 FIPS (O.2 PG-1="FedRAMP-path"), O.2 PG deliberately paused for boarding+quality/ADR focus (resumption only under ADR-0031+G30+G37+§4a.4.0 gate), doc-driven/ADR/wiki shift as primary quality mechanism, local red/blue/purple+CI fallback). All gate/ADR/quality/boarding claims governed here. Evidence in FLEET_AUDIT_GAP_REGISTER_2026-05-25.md + COMPREHENSIVE + CONTINUE_PLAYBOOK. (Full formal in audit report §3.) This is the "if ANY question" contract per the 2026-05-25 Fleet Representation Audit. Same-change-set discipline applies.
+
+## AI Workflow Safety
+
+- Treat all external text as untrusted for any AI-enabled workflow.
+- Never run AI agent jobs with write/secrets on untrusted triggers.
+- For high-risk actions (deploy, secrets, policy mutation), require human approval.
+- Follow [ACTIVE_DEFENSE_AND_INTEL_OPERATIONS_SSOT](https://github.com/centexmsp/repository-restructuring/blob/main/docs/ACTIVE_DEFENSE_AND_INTEL_OPERATIONS_SSOT.md): situational **WAF/Access/Bot**, optional **Rust ingress sanitizing Workers**, **Radar vs Threat Intel API** enrichment (cache KV; respect quotas), alternate **Telegram/Discord** fan-out via dispatcher — **never** unsolicited automated law-enforcement messaging; lawful evidence goes through **immutable audit** + human process.
+- Map internet-facing surfaces to [ATTACK_SURFACE_THREAT_TAXONOMY_METRICS_AND_ESCALATION_SSOT](https://github.com/centexmsp/repository-restructuring/blob/main/docs/ATTACK_SURFACE_THREAT_TAXONOMY_METRICS_AND_ESCALATION_SSOT.md): evaluate **SQLi/XSS/CSRF** and related vectors; record **τ** tier and **`S`** only with **multiple** signals (single IPs can be proxies **or** recon); escalate to **national** cybersecurity center paths **only** at **τ4**‑style corroboration with **human** approval—not commodity noise blocked at WAF alone.
+- Treat **AI coding agents**, **MCP**, and **IDE automation** as **supply-chain** actors: follow [AI_GENAI_AGENT_SUPPLY_CHAIN_AND_IMMUTABILITY_GAP_SSOT](https://github.com/centexmsp/repository-restructuring/blob/main/docs/AI_GENAI_AGENT_SUPPLY_CHAIN_AND_IMMUTABILITY_GAP_SSOT.md); **immutability‑first** production state; **mutations** only via **OIDC CI**, **HITL**, or **trusted‑machine** (WARP/posture/mTLS) with **immutable** audit; **fingerprinting** parity on **prod + decoy** per [HONEYPOT_STANDARDS](https://github.com/centexmsp/repository-restructuring/blob/main/docs/HONEYPOT_STANDARDS.md).
+- For repos that ship **`wasm32` / Workers** artifacts: enforce **[WASM_ARMOR_AND_TOOLCHAIN_HARDENING_SSOT](https://github.com/centexmsp/repository-restructuring/blob/main/docs/WASM_ARMOR_AND_TOOLCHAIN_HARDENING_SSOT.md)** (**release** profile, **pinned `wasm-opt`**, Workers/JS packaging, **SBOM**/artifact hash) **and** [WASM_BINARY_STRING_SURFACE_DEFENSE_SSOT](https://github.com/centexmsp/repository-restructuring/blob/main/docs/WASM_BINARY_STRING_SURFACE_DEFENSE_SSOT.md)—**no** secrets in static WASM data (**bindings** / runtime issuance only); **CI** forbidden-pattern scan on **post–`wasm-opt`** **production-equivalent** `.wasm` (**ARMOR-2**); **prod + decoy** parity on **both** stacks. Long-term **L8** transforms must flow through the **program-owned** differentiated toolchain per [WASM_CUSTOM_TOOLCHAIN_FORK_AND_UNIFICATION_PROGRAM_SSOT](https://github.com/centexmsp/repository-restructuring/blob/main/docs/WASM_CUSTOM_TOOLCHAIN_FORK_AND_UNIFICATION_PROGRAM_SSOT.md) (**no** permanent reliance on **vanilla** upstream CLIs).
+- **Trusted workstation (macOS Apple TCC):** Do not attribute **“… would like to access data from other apps”** system dialogs to this repo’s Cursor **hook** / **`cursor-security-watch`** path without **Unified log** proof; canonical triage: [OPERATOR_SESSION_START_AND_IDE_REALITY_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/OPERATOR_SESSION_START_AND_IDE_REALITY_SSOT.md) **§B** and [STANDARDS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/STANDARDS_SSOT.md).
+
+## Infrastructure and Endpoint Enforcement
+
+- Terraform plans must pass policy-as-code checks (Sentinel and/or OPA where applicable).
+- Vault must issue scoped short-lived credentials; no hardcoded long-lived secrets.
+- Ansible/AWX check-mode drift and compliance scans must run on schedule and feed dashboards.
+- Shared reusable modules must live in standalone GitHub repos and be consumed via pinned submodule/git dependency references.
+- Block TS/backup retirement when Rust replacement parity/superiority evidence is missing.
+- Block any design that inserts steganographic payloads into source-controlled files; stego is runtime-channel-only with explicit validation controls.
+
+## Dashboard Requirements
+
+Every project dashboard must include:
+- code validation tools + latest status,
+- network validation tools + latest status,
+- endpoint validation tools + latest status,
+- attack-surface/honeypot/response-time metrics.
+- KPI section with explicit percentage completion values for active hardening tracks.
+
+## Documentation Discipline
+
+- **Continuation / handoff:** follow [CONTINUE_ENGINEERING_PLAYBOOK_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CONTINUE_ENGINEERING_PLAYBOOK_SSOT.md) when the operator says **continue** or when closing multi-session work (verification matrix, deploy order, open gaps, **§3a Git**—pull, commit, push, consumer pins).
+- Update SSOT docs in the same change set as pipeline/security changes.
+- **Git:** agents keep **`repository-restructuring`** and touched consumers **committed and pushed** when work is merge-ready; do not leave SSOT-only commits unpushed while claiming cross-repo parity.
+- Do not create duplicate standards docs; extend canonical SSOT files.
+- After dashboard updates, run `scripts/verify-ssot-dashboards.sh` and keep it passing.
+- When editing **program checkout / deploy-order / two-host** SSOT files, run `scripts/verify-ssot-program-operating-docs.sh` (also enforced in **`reusable-mandatory-predeploy`** CI).
+- When editing **`workers/email-alerts`** or **`workers/immutable-audit-sink`**, run `scripts/verify-p0-email-audit-workers.sh` (same CI job **`p0-email-audit-workers`**).
+- Before publishing project status/planning claims for active repos, run `scripts/audit-osint-doc-reality.sh <repo-path>` and remediate any reported drift. The audit supports repos without **`docs/reference/PROJECT_STATUS.md`** (index/status fallbacks; see **`STANDARDS_SSOT.md`** documentation workflow). **`reusable-workflow-security`** invokes the audit when the script and a **`docs/`** tree exist—do not block the gate on osint-only paths.
+- For shared modules, require canonical references to `docs/SHARED_MODULE_INTEGRATION_STANDARD_SSOT.md` and repo-level module source policy files.
+- For repos with `.gitmodules`, require `scripts/verify-standalone-module-policy-presence.sh` and fail when standalone module policy file is missing or empty.
+- For browser-isolation repos, require `.github/policy/browser-isolation-p0-policy.txt` and enforce it with `scripts/verify-browser-isolation-p0.sh`.
+- For stego-capable repos, require `.github/policy/stego-source-safety-policy.txt` and enforce it with `scripts/verify-stego-source-safety.sh`.
+- For compromised/deprecated tooling trees (for example `.cline`), require `.github/policy/deprecated-paths-policy.txt` and enforce it with `scripts/verify-deprecated-paths.sh`.
+- Require `.github/policy/ci-script-security-policy.txt` and enforce it with `scripts/verify-ci-script-security.sh` for tracked shell/CI utility scripts.
+- Require shell script linting (`shellcheck`) in workflow-security gates when tracked `.sh` files exist.
+- When **Rust** is not used for automation (CI glue, maintenance scripts), enforce the **language ladder** and **script QA parity** in [STANDARDS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/STANDARDS_SSOT.md) (**Security-sensitive automation**): **interim** scanned **`scripts/*.sh`** over long unreviewed YAML **`run:`**; **target** move logic into **`crates/`** per [RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md) **§9** (full **`scripts/*.sh`** appendix + deprecation). **`verify-ci-script-security.sh`** + **`actionlint`** + supply-chain scripts stay **fail-closed** posture.
+- Require workflow semantic linting (`actionlint`) in workflow-security gates to detect unsafe/invalid workflow constructs beyond regex checks.
+- Require workflow supply-chain policy enforcement using `.github/policy/workflow-supply-chain-policy.txt` + `scripts/verify-workflow-supply-chain.sh`.
+- Require Dependabot version-2 manifests (`.github/dependabot.yml`) on default branches for first-party repos; SSOT enforces shape via `scripts/verify-dependabot-config-present.sh` (`verify-ssot-program-operating-docs.sh`) and `reusable-workflow-security` when the script is present. Org gap inventory: `scripts/audit-dependabot-org-catalog.sh` (authenticated `gh`; optional `DEPENDABOT_AUDIT_FAIL_ON_MISSING=1`).
+- Require threat-intel checks for in-use GitHub Actions dependencies (`scripts/check-github-actions-threat-intel.sh`) and block merges on active advisory matches.
+- Require workflow/policy/script backup snapshots (`scripts/backup-workflow-security-artifacts.sh`) before high-risk CI/CD control-plane changes.
+- Before legacy workflow/module migration work, require overlap/reuse-first analysis with documented consolidation candidates and defer-list for parity-sensitive paths.
+- Before Cloudflare implementation decisions, verify current guidance with Cloudflare docs/API MCP (`user-cloudflare-docs`, `user-cloudflare-api`) and resolve any drift.
+- Before GitHub CI/security changes, verify against current GitHub official docs/changelogs and apply secure defaults when docs conflict with local assumptions.
+- For `osint-platform` CI/security change sets, include evidence from:
+  - `cargo fmt --all -- --check`
+  - `cargo clippy --workspace --all-targets --all-features -- -D warnings`
+  - `cargo test --workspace --all-features`

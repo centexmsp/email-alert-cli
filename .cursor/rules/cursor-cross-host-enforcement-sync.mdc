@@ -1,0 +1,41 @@
+---
+description: Two-way Cursor enforcement sync (M5 macOS ↔ Intel RHEL 10.x); export/import config/cursor-program pack; cross-host model + MCP parity
+alwaysApply: true
+---
+
+# Cursor cross-host enforcement sync (M5 ↔ Intel RHEL 10.x)
+
+## Canonical flow (two-way)
+
+1. **SSOT workspace (`repository-restructuring`)** owns **`.cursor/rules/*.mdc`**, **`.cursor/ai-gateway.json`**, **`.cursor/agents/`**, and **`config/cursor-program/`** (consumer pack).
+2. **Export pack (SSOT → fleet):** `./scripts/export-cursor-program-pack.sh` mirrors **`.cursor/`** → **`config/cursor-program/`**; CI **`verify-cursor-program-pack-parity.sh`** must pass before merge.
+3. **Install pack (SSOT → consumer):** `./scripts/install-cursor-program-pack.sh <consumer-repo>` rewrites SSOT links to GitHub URLs.
+4. **Host-specific IDE settings** (**`~/.cursor/mcp.json`**, Cursor **Models → OpenAI BYOK**, 1Password Environments FIFO) are **not** in git — align per [CURSOR_CROSS_HOST_SYNC_PROTOCOL_2026-04-27.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_CROSS_HOST_SYNC_PROTOCOL_2026-04-27.md) **Per-host IDE** table.
+
+## When either host improves a rule
+
+- Edit **`.cursor/rules/<name>.mdc`** in **`repository-restructuring`** first (not only in a consumer clone).
+- Prefer **cross-platform** wording: **`$(id -gn)`** not **`staff`**; **`launchd` + `systemd`** for background tasks; **Integrated Terminal** for **`op`**, FIDO, and **`sudo`**.
+- Run **`export-cursor-program-pack.sh`**, **`verify-cursor-program-pack-parity.sh`**, then **`install-cursor-program-pack.sh`** on active consumers (**`firewall-analysis`**, etc.).
+- Append a dated bullet to **CURSOR_CROSS_HOST_SYNC_PROTOCOL** **Rules changelog** and **`docs/CHANGELOG.md`**.
+
+## Models + MCP parity checklist (every host switch)
+
+| Step | Command / action |
+|------|------------------|
+| Gateway models | **`./scripts/restore-cursor-cf-gateway-after-upgrade.sh`** → re-apply Cursor **Models → OpenAI** custom ids from **`.cursor/ai-gateway.json`** |
+| Gateway smoke | **`SMOKE_QUICK=1 ./scripts/smoke-ai-gateway-json-models.sh`** |
+| MCP envFile | **`./scripts/merge-mcp-json-envfile-centex.sh`** |
+| Wiki MCP | **`./scripts/ci-llm-wiki-bootstrap.sh`** + **`./scripts/merge-cursor-mcp-wiki-centex.sh`** |
+| Full verify | **`./scripts/post-cursor-restart-verify.sh`** → **restart Cursor** |
+
+## M5-only operator paths (do not fork into Intel-only rules)
+
+- **FIDO SSH key missing:** **`./scripts/carmel-m5-fido-ssh-key-recover.sh`** — [CARMEL_HOREB_SSH_BRINGUP_OPERATOR_NOW.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CARMEL_HOREB_SSH_BRINGUP_OPERATOR_NOW.md)
+- **carmel EDR intent:** [`.cursor/rules/carmel-edr-intent-coordination.mdc`](carmel-edr-intent-coordination.mdc)
+
+## RHEL 10.x (Intel/horeb) specifics
+
+- **Background runner:** **`config/systemd/background-task-health.timer`** (not LaunchAgent).
+- **Terminal profile:** **`.vscode/settings.json`** **`terminal.integrated.profiles.linux`** → **`cf-cursor-integrated-shell-launcher.sh`**.
+- **npm MCP cache fix:** **`report-npm-cache-root-owned.sh`** → **`chown …:$(id -gn)`**.
