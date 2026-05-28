@@ -1,0 +1,41 @@
+---
+description: Enforce consolidated Cloudflare token strategy, guard preflights, and documentation anti-sprawl. GitHub Actions Workers deploy (cloudflare/wrangler-action), provider secret CLOUDFLARE_API_TOKEN vs OIDC short-lived credentials, CF API-token secret scanning and DLP — pair MCP hub section 1e, CONTINUE section 3b, TOKEN_DOCUMENTATION_INDEX Cursor+MCP. Operator mint requests — paste TOKEN_CREATION_CHECKLIST verbatim: Mint request discipline (token name + exact scopes + program values in chat) + named blocks (human-readable steps + CF- title + Operator mint request table when present).
+alwaysApply: true
+---
+
+# Token Governance Enforcement
+
+## Purpose
+
+Keep Cloudflare token usage secure, reusable, and documented without sprawl.
+
+## Required Canonical Sources
+
+- `docs/TOKEN_ACCESS_STRATEGY_SSOT.md` (canonical design)
+- `docs/TOKEN_SCOPE_WORKING_MATRIX.md` (runtime evidence)
+- `docs/DOMAIN_ACCOUNT_DEPLOYMENT_POLICY.md` (operation classes, zone policy, **subscription checklist**)
+- `docs/TOKEN_CREATION_CHECKLIST_SSOT.md` (creation and one-by-one verification)
+- `docs/TOKEN_DOCUMENTATION_INDEX_SSOT.md` (navigation for `TOKEN_*` sprawl; **§A** = policy, **§C** = historical snapshots — supersession banners must keep readers on **§A**, not orphaned blockers; **Cursor + MCP** table + **`docs/00_SSOT.md`** **Tokens / vault** row → **`docs/MCP_AND_CLOUDFLARE_VERIFICATION_HUB_SSOT.md` §1e** for **GitHub Actions** **`wrangler-action`** / repo **`CLOUDFLARE_API_TOKEN`** vs program **OIDC**, CF secret-scanning + DLP; **`docs/GITHUB_ACTIONS_USAGE_AND_OFFLOAD_AUDIT_SSOT.md` §0.1**)
+
+## Enforcement Rules
+
+1. Do not create new token strategy docs when existing canonical files can be updated.
+2. Any Cloudflare mutation/deploy workflow must run guard preflight before action:
+   - `scripts/cloudflare-guard-preflight.sh`
+3. Account mutations are restricted to `c20c1964256ad6953f87e53bd1678ade`.
+4. `primary-security` operations must target `*.centexmsp.net`.
+5. `zone-exception` operations must use allowlisted zones and redirect back to `centexmsp.net` scope for protected flows.
+6. **Subscription alignment:** Treat **Business Pro + paid Workers** as **`centexmsp.net`-zone entitlements** unless a target zone’s billing is explicitly verified; design token scope and Worker placement per `docs/DOMAIN_ACCOUNT_DEPLOYMENT_POLICY.md` (**Cloudflare plan and subscription boundary** and **Subscription and zone entitlement verification checklist**); put **dated** evidence in **`docs/TOKEN_SCOPE_WORKING_MATRIX.md`**.
+7. Prefer reusable token portfolio over per-project token proliferation.
+8. Keep docs in sync in SSOT first; then reference from consumer repos.
+9. Narrow **Intel / Radar URL Scanner / SIEM enrichment** tokens follow **[CF_REPOSITORY_RESTRUCTURING_SSOT_API_TOKEN_SPEC](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CF_REPOSITORY_RESTRUCTURING_SSOT_API_TOKEN_SPEC.md) §11** and [ACTIVE_DEFENSE_AND_INTEL_OPERATIONS_SSOT](https://github.com/centexmsp/repository-restructuring/blob/main/docs/ACTIVE_DEFENSE_AND_INTEL_OPERATIONS_SSOT.md); chat platform credentials are **not** Cloudflare API tokens (Workers secrets only).
+10. **Bootstrap ingest:** New Cloudflare API token secrets (shown once at mint) → **`credential-manager` `store-cloudflare-token`** or **`op`** stdin wrappers documented in **[CURSOR_1PASSWORD_DEVELOPER_VAULT_2026-04-27.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_1PASSWORD_DEVELOPER_VAULT_2026-04-27.md)** (**Bootstrap / Pass 1 deploy gate**); optional one-time Agent-chat paste **only** when the immediate next step is vault write — **[TOKEN_CREATION_CHECKLIST_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/TOKEN_CREATION_CHECKLIST_SSOT.md)** step **5** + **§0.0a**, **[AGENT_AUTOMATION_CLOUDFLARE_PLAYBOOK_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/AGENT_AUTOMATION_CLOUDFLARE_PLAYBOOK_SSOT.md)** **§2.2a**. **Do not guess vault contents:** run **`scripts/report-ssot-cloudflare-1password-inventory.sh`** when **`op whoami`** works; ingest portfolio **`CF-SSOT-DEPLOY-WORKERS API`** via **`scripts/op-upsert-ssot-deploy-workers-api-token.sh`** (stdin); schedule **`automated-token-lifecycle.sh --action check-expiration --token-name "CF-SSOT-DEPLOY-WORKERS API"`** with **`EMAIL_ALERT_*`** — **`.cursor/rules/cloudflare-token-1password-bootstrap.mdc`**.
+
+11. **1Password CLI (`op`) before reads:** Any automation or agent path that will invoke **`op read`**, **`op item`**, or **`op run`** with **`op://`** must follow **[ONEPASSWORD_CLI_SESSION_GATE_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/ONEPASSWORD_CLI_SESSION_GATE_SSOT.md)** (**`op signin`** → operator login → **`op whoami`**) in **that** shell, or use **`OP_SERVICE_ACCOUNT_TOKEN`** in CI — do **not** assume the IDE unlocked the CLI.
+
+12. **§0.0c title ↔ Cloudflare `name` audit:** the **only** approved extra bearer for reading token **metadata** in automation is the **portfolio §5** cutout in **[TOKEN_ACCESS_STRATEGY_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/TOKEN_ACCESS_STRATEGY_SSOT.md)** (**`CF-ALIGNMENT-USER-API-TOKENS-READ`** or **`CF-MCP-FULL-OBS-BINDINGS API`** when it already has **User API Tokens Read**) surfaced as **`CF_ALIGNMENT_LOOKUP_OP_REF`** — **[TOKEN_CREATION_CHECKLIST_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/TOKEN_CREATION_CHECKLIST_SSOT.md) §0.0c**, **`./scripts/run-op-vault-alignment-audit.sh`**. **Blessed through Pass 1 ~80%**; **rotate + dated `TOKEN_SCOPE` evidence + audit rerun** toward **Pass 2 ~95%**. **Never** commit bearer values or paste them into Agent chat.
+
+## Rust Migration Standard
+
+- Treat `cloudflare-guard` as the long-term cross-platform guard implementation.
+- Bash guard remains only as migration compatibility until parity is validated in CI on macOS/Win11/RHEL.

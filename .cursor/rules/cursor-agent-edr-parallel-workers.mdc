@@ -1,0 +1,32 @@
+---
+description: Cursor agent parallel workers + S1 EDR pacing (replaces max-1-subagent ban)
+alwaysApply: true
+---
+
+# Cursor agent parallel workers & S1 EDR pacing
+
+**Operator policy (2026-05-27):** Parallel background workers are **allowed** when safe and logical. The prior **max 1 subagent** ban is **retired**; incident history remains in [KNOWN_BUGS_AND_ISSUES.md](https://github.com/centexmsp/firewall-analysis/blob/main/docs/KNOWN_BUGS_AND_ISSUES.md) (2026-04-14 lockup).
+
+## Parallel workers
+
+- Cursor agents **MAY** spawn multiple background workers (**Task** / **explore** / **`run_in_background`**) for **independent** workstreams (e.g. system updates vs O.2 code vs docs).
+- Prefer Cursor **Build in Parallel** / **`/multitask`** when lanes do not share files or branches ([pr-first-parallel-workflow-enforcement.mdc](pr-first-parallel-workflow-enforcement.mdc)).
+- **Avoid duplicate work** on the same files/branches; coordinate via task list or explicit lane ownership.
+
+## Safety (SentinelOne / EDR)
+
+- **Incident context (2026-04-14):** Prompt bloat + **rapid** parallel tool bursts + many subagents contributed to S1 `keylogger.lua` false positives and lockups — see firewall-analysis **KNOWN_BUGS**.
+- **Do not scan** `/opt/sentinelone/` or its logs without **explicit operator approval**.
+- **Cap burst scanning** on one host if EDR alerts occur; fall back to **sequential, targeted** reads and **deliberate pacing** between heavy operations (mitigation, not a permanent agent count cap).
+- **Prompt size awareness:** Avoid loading entire rule packs + full repo context in one turn when possible.
+
+## MCP auth (unattended)
+
+- **No proactive `mcp_auth`** in unattended/background runs unless the operator explicitly requests auth in that run ([agent-cloudflare-execution.mdc](agent-cloudflare-execution.mdc)).
+- **Dedupe** `plugin-cloudflare-*` vs `user-cloudflare-*` MCP families; prefer already-authenticated servers.
+
+## Cross-references
+
+- [SENTINELONE_CONSOLE_TRIAGE_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/SENTINELONE_CONSOLE_TRIAGE_SSOT.md)
+- [CLOUDFLARE_SECURITY_CONTROLS_MATRIX_AND_GAPS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CLOUDFLARE_SECURITY_CONTROLS_MATRIX_AND_GAPS_SSOT.md) §4a.4.0 (MCP & AI Agent Toolchain row)
+- Consumer `.cursorrules` + `/home/developer/CLAUDE.md` (keep in sync on substantive policy changes)

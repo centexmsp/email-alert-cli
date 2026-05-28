@@ -1,0 +1,14 @@
+---
+description: Mandatory vendor research from official Cloudflare + xAI sources before Cloudflare/xAI implementation; browser isolation scope vs IDE MCP.
+alwaysApply: true
+---
+
+# Vendor documentation first (Cloudflare + xAI)
+
+1. **Before** planning or implementing anything that touches **Cloudflare** (Workers, WAF, DNS, API, Wrangler, dashboards, tokens, MCP behavior): consult official **Cloudflare docs for agents** — [https://developers.cloudflare.com/docs-for-agents/](https://developers.cloudflare.com/docs-for-agents/) — and use in-IDE **Cloudflare docs MCP** (`search_cloudflare_documentation`) and/or **`user-cloudflare-api` `search`** / **`execute`** (GET-first) per [docs/VENDOR_DOCUMENTATION_FIRST_CLOUDFLARE_XAI_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/VENDOR_DOCUMENTATION_FIRST_CLOUDFLARE_XAI_SSOT.md). Do **not** rely on model memory alone for API shapes or product limits.
+
+2. **Before** planning or implementing anything that touches **xAI**, **Grok**, or **xAI pricing/API**: use xAI’s official **Docs MCP** at **`https://docs.x.ai/api/mcp`** (Streamable HTTP, stateless) — quickstart [https://docs.x.ai/developers/docs-mcp](https://docs.x.ai/developers/docs-mcp). Wire Cursor (**Settings → MCP → URL**) using [config/cursor-mcp-vendor-docs-snippet.example.json](https://github.com/centexmsp/repository-restructuring/blob/main/config/cursor-mcp-vendor-docs-snippet.example.json). Same SSOT: [docs/VENDOR_DOCUMENTATION_FIRST_CLOUDFLARE_XAI_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/VENDOR_DOCUMENTATION_FIRST_CLOUDFLARE_XAI_SSOT.md).
+
+3. **Browser isolation Worker** (`cloudflare-browser-isolation`): use for **untrusted / arbitrary web content** in **automation and research pipelines** per [docs/SECURITY_RESEARCH_AND_ALERTING_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/SECURITY_RESEARCH_AND_ALERTING_SSOT.md) §2 — **not** as a replacement for pulling **official** Cloudflare/xAI documentation via MCP. Deployment/evidence is **consumer-repo + Worker URLs**, not the IDE MCP path.
+
+4. **Doc updates:** when vendor guidance changes behavior in-repo, update SSOT in the **same change set** and cite the official URL or MCP tool used.

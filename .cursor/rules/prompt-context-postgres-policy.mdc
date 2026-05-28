@@ -1,0 +1,19 @@
+---
+description: Prompt-context PostgreSQL URL checks + orchestration integration deferral pointers
+alwaysApply: false
+---
+
+# Prompt-context Postgres + SC-PROMPT integration
+
+1. **Non-local DB URLs:** operators run **`./scripts/verify-prompt-context-database-url.py`** with **`PROMPT_CONTEXT_DATABASE_URL`** set before claiming TLS posture is correct. Bundled in **`./scripts/verify-prompt-context-control-plane.sh`** (**mandatory-predeploy** + **`verify-pre-push-ssot-gates.sh`**). Policy: **`config/prompt-context-postgres-policy.md`** · prose: **`docs/AGENT_DOCUMENTATION_ROUTING_SSOT.md`** section 8. **`VERIFY_PROMPT_CONTEXT_DATABASE_URL_STRICT=1`** in CI jobs that must inject the secret. **Local `cargo test` / Diesel:** linking needs **`libpq`** — see [`crates/prompt-context-core/README.md`](https://github.com/centexmsp/repository-restructuring/blob/main/crates/prompt-context-core/README.md) (macOS **`LIBRARY_PATH`** + Homebrew; CI installs **`libpq-dev`** in **`reusable-ci-gates`**).
+
+2. **Secrets:** **`with-prompt-context-database-url-from-op.sh`** · **[ONEPASSWORD_CLI_SESSION_GATE_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/ONEPASSWORD_CLI_SESSION_GATE_SSOT.md)** — no URIs in repo.
+
+3. **Background automation enforcement (proven):** keep **`REDACT_REPORT_LOGS=1`** and **`VERIFY_REDACTED_REPORTS=1`** default-on in **`soak-prompt-context-feedback.sh`** and **`run-background-program-tasks.sh`**; do not publish logs with credential-like URI material. For breadth/release runs, use **`BG_TASK_PROFILE=breadth|release`** with **`PROMPT_CONTEXT_DATABASE_URL`** or **`AUTO_PROVISION_BG_DB=1`**.
+   - **On-demand default:** **`BG_TASK_HOURS=0`** and loops blocked unless **`ALLOW_BACKGROUND_LOOP=1`**.
+   - **Unattended safety:** fail-closed on iteration failures + write **`state/background-task-last-status.json`**.
+
+4. **Foreground/background task control-plane (proven):** use Rust **`task-control-plane`** + **`config/task-control-plane-checklist.json`** as the local running-task/checklist state; capture **resources** before heavy runs and keep heavy background profiles behind **`RESOURCE_GUARD_ENABLED=1`** thresholds. Use **`task-control-plane suggest`** for automatic next-task recommendations from checklist/resource context.
+   - Prefer **Rust-first** implementations for unattended security/background control binaries; keep shell/Python as thin wrappers around Rust where feasible.
+
+5. **`claude-ai-orchestration` + `prompt-consensus-core`:** defer wiring until **[AGENT_DOCUMENTATION_ROUTING_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/AGENT_DOCUMENTATION_ROUTING_SSOT.md)** section 7.4 gate and **[PROGRAM_CHECKOUT_SYNC_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PROGRAM_CHECKOUT_SYNC_SSOT.md)** multi-machine dirty discipline.

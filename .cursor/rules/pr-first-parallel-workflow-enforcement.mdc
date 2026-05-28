@@ -1,0 +1,30 @@
+---
+description: Enforce PR-first parallel execution workflow
+alwaysApply: true
+---
+
+# PR-first parallel workflow enforcement
+
+1. Default every non-trivial slice to **PR-oriented execution**:
+   - shape changes into reviewable units,
+   - preserve concise validation evidence,
+   - keep branch/commit flow compatible with `gh pr create`.
+
+2. For work that can parallelize safely, prefer Cursor 3.3+ primitives:
+   - **Build in Parallel** and `/multitask` for independent lanes,
+   - keep dependent steps serialized.
+
+3. Background automation must run through **host-managed** schedulers and never compete with foreground interactivity:
+   - **macOS (M5/carmel):** `launchd`, `macos-run-background-program-tasks.sh`, [`install-background-runner-launchagent.sh`](https://github.com/centexmsp/repository-restructuring/blob/main/scripts/install-background-runner-launchagent.sh)
+   - **RHEL 10.x (Intel/horeb):** user **`systemd`** timers/services ([`config/systemd/background-task-health.timer`](https://github.com/centexmsp/repository-restructuring/blob/main/config/systemd/background-task-health.timer)), `./scripts/run-background-program-tasks.sh` with **`BG_LOCK_CONFLICT_EXIT_OK=1`**
+   - foreground pressure gets priority on both hosts; background heavy lanes self-throttle using dynamic guard signals ([`BACKGROUND_TASK_AUTOMATION_SSOT.md`](https://github.com/centexmsp/repository-restructuring/blob/main/docs/BACKGROUND_TASK_AUTOMATION_SSOT.md))
+
+4. Do not introduce ad-hoc duplicate background owners:
+   - keep single-owner lock semantics enabled,
+   - document any override in SSOT status rows.
+
+5. Every PR-workflow policy change must update SSOT docs in the same slice:
+   - `CONTINUE_ENGINEERING_PLAYBOOK_SSOT.md`
+   - `BACKGROUND_TASK_AUTOMATION_SSOT.md`
+   - `FOREGROUND_BACKGROUND_TASK_CONTROL_PLANE_SSOT.md`
+   - `COMPREHENSIVE_PROJECT_STATUS_REPORT.md` and `CHANGELOG.md`

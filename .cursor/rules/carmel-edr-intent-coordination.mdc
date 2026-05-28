@@ -1,0 +1,25 @@
+---
+description: carmel network automation — log EDR intent before arp-scan, mtr, tshark, curl smokes; tell operator expected Defender alerts
+globs:
+  - scripts/carmel-*.sh
+  - docs/CARMEL_*_SSOT.md
+alwaysApply: false
+---
+
+# carmel EDR intent coordination
+
+**Canonical:** [docs/CARMEL_ENDPOINT_EDR_COORDINATION_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CARMEL_ENDPOINT_EDR_COORDINATION_SSOT.md)
+
+## Before running high-risk carmel scripts
+
+1. **Log intent** (wired in scripts; agents may also run explicitly):
+   `./scripts/carmel-edr-intent-log.sh --script <name> --class <pcap_capture|l2_neighbor_scan|wifi_diag|path_trace|https_smoke> --reason "…" [--domains a,b] [--ips …]`
+2. **Tell the operator** which Microsoft Defender alerts may appear (3592 → **arp-scan**; curl bursts → readiness/watch/TLS; **20.190.x** → Entra/M365 split tunnel).
+3. **sudo / PCAP / cloudflared login** — print exact commands for **Integrated Terminal** only; do not hang Agent on sudo.
+4. **1Password** — follow [ONEPASSWORD_CLI_SESSION_GATE_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/ONEPASSWORD_CLI_SESSION_GATE_SSOT.md) **§3**; never request secrets in chat.
+
+## After an alert
+
+- Correlate timestamp with `state/edr-automation-intent.jsonl`
+- Optional: `./scripts/carmel-macos-security-log-tail.sh`
+- Update [docs/reports/CARMEL_EDR_ALERT_TRIAGE-20260522.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/reports/CARMEL_EDR_ALERT_TRIAGE-20260522.md) only when new alert IDs appear

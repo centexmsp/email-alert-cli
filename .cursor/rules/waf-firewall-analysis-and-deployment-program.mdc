@@ -1,0 +1,10 @@
+---
+description: Enforcement pointer for WAF/Rulesets work — canonical prose is AGENT_AUTOMATION_CLOUDFLARE_PLAYBOOK_SSOT.md §1.2 + §2.2 only.
+alwaysApply: true
+---
+
+# WAF + program deployment (enforcement only)
+
+**Canonical instructions:** **[`docs/AGENT_AUTOMATION_CLOUDFLARE_PLAYBOOK_SSOT.md`](https://github.com/centexmsp/repository-restructuring/blob/main/docs/AGENT_AUTOMATION_CLOUDFLARE_PLAYBOOK_SSOT.md) §1.2** (routing map) and **§2.2** (WAF / **`firewall-analysis`** / MCP **GET** / token checklist / post–Pass **1** consolidation).
+
+This rule **does not** duplicate that prose. If §2.2 is unclear, **edit the playbook** in the same change set instead of growing this file.

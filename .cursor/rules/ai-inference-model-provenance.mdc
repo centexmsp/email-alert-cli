@@ -1,0 +1,14 @@
+---
+description: Hard block on China/Russia-origin inference models; NVIDIA NIM and other allowlisted vendors only per SSOT
+alwaysApply: true
+---
+
+# AI inference model provenance (program hard rule)
+
+1. **Non-negotiable:** Do **not** select, wire, or recommend **inference models or publishers** that are **primarily developed, governed, or headquartered** in the **People’s Republic of China** or the **Russian Federation** for **any** program automation, Workers, IDE defaults, or CI-assisted reasoning — including models exposed via [NVIDIA Build / NIM](https://build.nvidia.com/models) or other aggregators.
+
+2. **Canonical detail and NVIDIA catalog hygiene:** [docs/AI_INFERENCE_MODEL_SOURCING_POLICY_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/AI_INFERENCE_MODEL_SOURCING_POLICY_SSOT.md) — blocklist examples (**DeepSeek**, **Qwen**, **Z.ai / GLM**, **Moonshot / Kimi**, **MiniMax**, **etc.**), allowlist posture (**NVIDIA**, **Google**, **Meta**, **Mistral**, **Black Forest Labs**, **etc.**), and **precedence:** when a marketplace lists a blocked publisher, **do not use** that endpoint even if it is “free.”
+
+3. **New publishers:** Any **new** vendor or model family not already classified in the SSOT requires an **SSOT update in the same change set** before use (no ad hoc first use).
+
+4. **Does not relax other rules:** Vendor documentation first ([VENDOR_DOCUMENTATION_FIRST_CLOUDFLARE_XAI_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/VENDOR_DOCUMENTATION_FIRST_CLOUDFLARE_XAI_SSOT.md)), secrets hygiene, and supply-chain controls still apply.

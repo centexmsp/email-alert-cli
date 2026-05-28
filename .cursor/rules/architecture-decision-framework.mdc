@@ -1,0 +1,60 @@
+---
+description: Formalizes SSOT responsibilities, repo roles (repository-restructuring vs consumers like osint-platform), sync strategies, database decisions, submodule vs crate logic, and R2 backup standards. Always active.
+alwaysApply: true
+---
+
+# Architecture Decision Framework
+
+**Purpose**: Ensure consistent decision-making across repos. All agents must follow this when working on architecture, documentation, submodules, or cross-repo coordination. Updates must be made in `repository-restructuring` first.
+
+## Repository Responsibilities (SSOT vs Consumer)
+
+**`repository-restructuring` (SSOT - Primary Workspace)**:
+- Architecture, high-level decisions, ADRs
+- Comprehensive status (`COMPREHENSIVE_PROJECT_STATUS_REPORT.md`), KPIs
+- Standards, Cursor rules (`.cursor/rules/*.mdc`), methodology
+- Cross-repo coordination, bidirectional references
+- Documentation migration/consolidation
+- **All changes here reflected in consumer repos via PRs/submodule updates**
+
+**Consumer Repos (e.g. `osint-platform`)**:
+- Implementation details, machine-specific branches (e.g. `macos/*`)
+- Consumer code using submodules/crates
+- Local testing, feature development
+- **MUST link back to SSOT docs; pull updates from here. No high-level status/docs here.**
+
+**Submodules (e.g. `cloudflare-browser-isolation`, `credential-manager`)**:
+- Reusable, security-critical components
+- Standardized structure: `[dev-dependencies]` for tests (per credential-manager), enforced `.gitignore` (no `target/`, `node_modules/`), comprehensive tests, WASM support
+- Pinned commits, cross-referenced to SSOT
+
+## Sync & Update Strategy
+1. Make all architecture/status changes in this SSOT repo first.
+2. Update relevant docs (`COMPREHENSIVE_PROJECT_STATUS_REPORT.md`, `00_SSOT.md`, etc.) in real-time.
+3. Use PR workflow: meaningful commits, self-review, update submodules in consumers.
+4. R2 encrypted backups are **standard** for all sensitive work.
+5. Run `git status` frequently; maintain clean state.
+6. Update continue prompts and status reports at end of sessions.
+7. Multi-session **continue** handoff: follow [CONTINUE_ENGINEERING_PLAYBOOK_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CONTINUE_ENGINEERING_PLAYBOOK_SSOT.md) (verification matrix, deploy order, open gaps, **§3a Git hygiene**—pull, commit, push, consumer submodule bumps; **§5.1–§5.4** milestone docs + consolidation + canvas + Cursor changelog prep). Cross-host session sync and bare **continue** semantics: [CURSOR_CROSS_HOST_SYNC_PROTOCOL_2026-04-27.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_CROSS_HOST_SYNC_PROTOCOL_2026-04-27.md). **Intel vs M5** lane notes only: [CONTINUE_PROMPT_M5.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CONTINUE_PROMPT_M5.md).
+8. **Non-Rust automation and scripts:** when Rust is not feasible (including thin **GitHub Actions** glue), follow the **language ladder** and **script QA parity** bullets in [STANDARDS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/STANDARDS_SSOT.md) under **Security-sensitive automation (language + validation)**—same policy gates as tracked code where applicable (`shellcheck`, `verify-ci-script-security`, `actionlint`, supply-chain scripts).
+9. **Program operating layout** (deploy order, Intel vs M5, sibling sync): [PROGRAM_SECURITY_DEPLOY_ORDER_AND_MULTI_HOST_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PROGRAM_SECURITY_DEPLOY_ORDER_AND_MULTI_HOST_SSOT.md), [PROGRAM_CHECKOUT_SYNC_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PROGRAM_CHECKOUT_SYNC_SSOT.md); consumers: [CONSUMER_SSOT_BACKLINK_MINIMUM.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CONSUMER_SSOT_BACKLINK_MINIMUM.md). **Doc consolidation + edge propagation:** [REPOSITORY_RESTRUCTURING_DOC_CONSOLIDATION_2026-04-27.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/REPOSITORY_RESTRUCTURING_DOC_CONSOLIDATION_2026-04-27.md) section **6**.
+
+## Key Technical Decisions
+- **Database**: PostgreSQL cluster + Cloudflare Hyperdrive (production/scalable queries), local SQLite or D1 (dev/edge). Document tradeoffs in ADRs.
+- **Submodule vs Crate**:
+  - **Crate**: Pure Rust reusable libraries (e.g. sanitizers, common utils). Publish to crates.io or internal.
+  - **Submodule**: Complex projects with Workers, WASM, multi-lang, full CI/CD (e.g. `cloudflare-browser-isolation`).
+  - **Shared module source-of-truth rule**: reusable cross-repo modules must have dedicated GitHub repositories; consumer repos integrate by pinned submodule/git reference, not copied source trees.
+  - See `SUBMODULE_MANAGEMENT.md` and `BROWSER_ISOLATION_ZION_2026_PLAN.md`.
+- **WASM Milestone**: Complete (getrandom dual-support for WASI+Linux, scraper→select, jsonwebtoken-rustcrypto). No more build artifacts in git.
+- **Cloudflare Integration**: Use latest observability (MCP servers for logs/builds), LLM protection (fingerprinting hooks, prompt injection mitigations), R2 for backups. **New Workers** default to **Rust** (`workers-rs` + `worker-build`); **repo-root program automation** defaults to **Rust** crates under **`crates/`**; see `.cursor/rules/rust-edge-workers-preference.mdc`, `.cursor/rules/rust-first-program-automation.mdc`, and `docs/STANDARDS_SSOT.md` §1.
+
+## Enforcement
+- **Always reference this rule** before major decisions.
+- Update this file + `COMPREHENSIVE_PROJECT_STATUS_REPORT.md` for any architecture changes.
+- Follow active SSOT rules in `.cursor/rules/` (especially `devsecops-enforcement.mdc`, `shared-module-integration-enforcement.mdc`, `token-governance-enforcement.mdc`, and `agent-cloudflare-execution.mdc`) plus canonical docs in `docs/STANDARDS_SSOT.md`, `docs/AGENT_AUTOMATION_CLOUDFLARE_PLAYBOOK_SSOT.md`, and `docs/SHARED_MODULE_INTEGRATION_STANDARD_SSOT.md`.
+- Violating repo boundaries or skipping docs updates is not permitted.
+
+**Related**: [COMPREHENSIVE_PROJECT_STATUS_REPORT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/COMPREHENSIVE_PROJECT_STATUS_REPORT.md), [SUBMODULE_MANAGEMENT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/SUBMODULE_MANAGEMENT.md)
+
+*This rule is active and binds all AI agents and developers in the project.*
