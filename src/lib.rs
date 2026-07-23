@@ -1,6 +1,7 @@
 //! HMAC v1 signing for the `email-alerts` Cloudflare Worker `POST /alert` contract (SSOT: centexmsp/repository-restructuring `workers/email-alerts`).
 //! Optional reuse from [credential-manager](https://github.com/centexmsp/credential-manager) via `path` or `git` dependency.
 use hmac::Hmac;
+use hmac::KeyInit;
 use hmac::Mac;
 use serde::Serialize;
 use sha2::Sha256;
