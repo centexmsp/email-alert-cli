@@ -19,15 +19,16 @@ alwaysApply: true
 - Run **`export-cursor-program-pack.sh`**, **`verify-cursor-program-pack-parity.sh`**, then **`install-cursor-program-pack.sh`** on active consumers (**`firewall-analysis`**, etc.).
 - Append a dated bullet to **CURSOR_CROSS_HOST_SYNC_PROTOCOL** **Rules changelog** and **`docs/CHANGELOG.md`**.
 
-## Models + MCP parity checklist (every host switch)
+## Models + MCP parity checklist (every host switch **and after Cursor app upgrade**)
 
 | Step | Command / action |
 |------|------------------|
-| Gateway models | **`./scripts/restore-cursor-cf-gateway-after-upgrade.sh`** → re-apply Cursor **Models → OpenAI** custom ids from **`.cursor/ai-gateway.json`** |
+| Gateway models | **`./scripts/restore-cursor-cf-gateway-after-upgrade.sh`** → re-apply Cursor **Models → OpenAI** custom ids from **`.cursor/ai-gateway.json`** (**default `grok-4.5`**, build **`grok-build-0.1`**) |
 | Gateway smoke | **`SMOKE_QUICK=1 ./scripts/smoke-ai-gateway-json-models.sh`** |
 | MCP envFile | **`./scripts/merge-mcp-json-envfile-centex.sh`** |
 | Wiki MCP | **`./scripts/ci-llm-wiki-bootstrap.sh`** + **`./scripts/merge-cursor-mcp-wiki-centex.sh`** |
 | Full verify | **`./scripts/post-cursor-restart-verify.sh`** → **restart Cursor** |
+| Hierarchy / loops | Thin **AGENTS.md** + pack rules per [cursor-grok-agent-hierarchy-and-loops.mdc](cursor-grok-agent-hierarchy-and-loops.mdc); no **`GROK.md`** |
 
 ## M5-only operator paths (do not fork into Intel-only rules)
 

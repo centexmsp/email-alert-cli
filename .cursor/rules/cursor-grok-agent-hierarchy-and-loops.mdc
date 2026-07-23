@@ -1,0 +1,68 @@
+---
+description: >-
+  AGENTS.md hierarchy (no GROK.md); autonomous no-HITL loops + PR; Cursor
+  upgrade restore (gateway/MCP/hooks); side chats; grok-4.5 / grok-build-0.1
+alwaysApply: true
+---
+
+# Cursor / Grok agent hierarchy + autonomous loops
+
+**Canonical prose (do not fork):**
+
+- [CURSOR_GROK_AGENT_HIERARCHY_AND_LOOP_OPTIMIZATION_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_GROK_AGENT_HIERARCHY_AND_LOOP_OPTIMIZATION_SSOT.md)
+- [CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md)
+- Pack + templates: [config/cursor-program/README.md](https://github.com/centexmsp/repository-restructuring/blob/main/config/cursor-program/README.md)
+
+## Hierarchy (always)
+
+1. **Common standards / enforcement** live only in **`repository-restructuring`** (`.cursor/rules`, pack, SSOT docs).  
+2. **Consumers** ship a **thin root `AGENTS.md`** (template: pack **`templates/AGENTS.consumer.md`** or **`AGENTS.mssp-platform.md`**). Do **not** invent **`GROK.md`**.  
+3. **`CLAUDE.md`** (if present) is a **thin adapter** (`@AGENTS.md`) — not a second standards master. Prefer pack **`templates/CLAUDE.md.adapter`**.  
+4. **Models:** program default **`grok-4.5`**; long agentic / Build loops **`grok-build-0.1`** via **`.cursor/ai-gateway.json`** (xAI Docs MCP before changing ids).  
+5. **Durable state** in git (**COMPREHENSIVE** Continue queue, CHANGELOG) — not chat history alone.
+
+## Git + docs hygiene (always — Cursor and long loops)
+
+**Operator standing order:** every substantive Cursor slice ends with **committed + pushed** git and **updated** SSOT/consumer docs (wiki re-ingest when docs move). Do **not** leave merge-ready work only on disk.
+
+1. **Same change set:** code/script fix + `docs/CHANGELOG.md` + `COMPREHENSIVE` Current WIP (when status moves) + any touched runbook.  
+2. **Commit:** `./scripts/git-commit-with-machine-lane.sh -m "…"` (Machine-Lane trailer).  
+3. **Push:** `safe-devops-wrapper git push` (or consumer PR when branch protection requires).  
+4. **Cross-repo:** install pack / thin `AGENTS.md` on consumers when hierarchy rules change; no parallel `GROK.md`.  
+5. **Canonical contract:** [CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md) §5 + [ssot-doc-lifecycle-enforcement.mdc](ssot-doc-lifecycle-enforcement.mdc).
+
+## Autonomous loops (no-HITL lanes)
+
+Follow [CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md):
+
+- **Allowed:** docs/SSOT/wiki, fleet policy/AGENTS, local verify, scoped dep hygiene, code-reuse audits, PR slices.  
+- **Forbidden without HITL:** token mint/revoke, deploy-token broaden, interactive `op signin` when no SA/Keychain, unguarded `wrangler deploy`/secrets, production DNS/Access cutover.  
+- Every loop tick: research-first, gates before “done”, machine-lane commit trailer, **push**, no uncommitted merge-ready work.
+
+## Cursor product features (use when helpful)
+
+- **Side chats** (`/side`, `/btw`) for research/tangents without derailing the main agent.  
+- **Agents Window transcript search** (Cmd+K) / in-thread Cmd+F — prefer over re-pasting full SSOT.  
+- **Build in Parallel** / **`/multitask`** for independent lanes ([pr-first-parallel-workflow-enforcement.mdc](pr-first-parallel-workflow-enforcement.mdc)).  
+- **Cloud agent conversation hooks** (vendor) do **not** replace local fail-closed **`.cursor/hooks.json`** + **`devops-command-gate-rs`**.
+
+## After every Cursor app upgrade (mandatory)
+
+1. Skim [Cursor Changelog](https://cursor.com/changelog) + [VENDOR §7.A](https://github.com/centexmsp/repository-restructuring/blob/main/docs/VENDOR_DOCUMENTATION_FIRST_CLOUDFLARE_XAI_SSOT.md).  
+2. **`./scripts/restore-cursor-cf-gateway-after-upgrade.sh`** → re-apply Models → OpenAI **`/compat`** + custom ids from **`.cursor/ai-gateway.json`**.  
+3. **`SMOKE_QUICK=1 ./scripts/smoke-ai-gateway-json-models.sh`** when gateway token is available.  
+4. **`./scripts/post-cursor-restart-verify.sh`** (integrated terminal).  
+5. If rules/gateway changed on SSOT: **`./scripts/export-cursor-program-pack.sh`** + **`verify-cursor-program-pack-parity.sh`**; refresh consumers with **`install-cursor-program-pack.sh`**.  
+6. New/renamed **`.mdc`**: extend wiki plan **§4a** + re-ingest in the same change set ([ssot-doc-lifecycle-enforcement.mdc](ssot-doc-lifecycle-enforcement.mdc)).
+
+## Processing new program files
+
+| Artifact | How it gets processed |
+|----------|------------------------|
+| **`docs/*_SSOT.md`** | Git merge authority; wiki **ingest** + **index rebuild**; frontmatter **`type: page`** when `doc_type: ssot` |
+| **`.cursor/rules/*.mdc`** | Always-apply / globs load in IDE; **export** → **`config/cursor-program/rules/`**; CI pack parity |
+| **`config/cursor-program/templates/*`** | Copied/seeded into consumers as **AGENTS.md** / CLAUDE adapter — not auto-applied until install/seed |
+| **`.cursor/ai-gateway.json`** | Pack mirror **`ai-gateway.cursor.json`**; UI Models still need restore after upgrades |
+| **`.cursor/hooks.json`** | Reference in pack only; live hooks need gate binary on this repo |
+
+Cross-host: [cursor-cross-host-enforcement-sync.mdc](cursor-cross-host-enforcement-sync.mdc).

@@ -1,5 +1,7 @@
 ---
-description: Enforce PR-first parallel execution workflow
+description: >-
+  PR-first parallel workflow; multitask/side chats; autonomous loop no-HITL
+  lanes and PR body Machine context
 alwaysApply: true
 ---
 
@@ -9,9 +11,11 @@ alwaysApply: true
    - shape changes into reviewable units,
    - preserve concise validation evidence,
    - keep branch/commit flow compatible with `gh pr create`.
+   - Long autonomous loops: [CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md) + [cursor-grok-agent-hierarchy-and-loops.mdc](cursor-grok-agent-hierarchy-and-loops.mdc).
 
-2. For work that can parallelize safely, prefer Cursor 3.3+ primitives:
+2. For work that can parallelize safely, prefer Cursor **3.3+ / 3.11+** primitives:
    - **Build in Parallel** and `/multitask` for independent lanes,
+   - **side chats** (`/side`, `/btw`) for read-heavy tangents while main agent continues,
    - keep dependent steps serialized.
 
 3. Background automation must run through **host-managed** schedulers and never compete with foreground interactivity:

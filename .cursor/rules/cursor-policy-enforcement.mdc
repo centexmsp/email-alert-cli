@@ -9,7 +9,7 @@ alwaysApply: true
 
 1. Treat `.cursor/hooks.json` and `.cursor/hooks/**` as security policy code.
 2. Keep security-critical hook logic in Rust (`.cursor/hooks/devops-command-gate-rs`).
-3. Keep `beforeMCPExecution` fail-closed after validation. **`beforeShellExecution` is not configured in this repo’s `hooks.json`** (Cursor Agent shell is not gated here); still route **`git push`** / **`wrangler deploy`** / IaC applies through **`safe-devops-wrapper`** and Cloudflare preflight by policy—do not treat absence of a shell hook as permission to skip controls.
+3. Keep `beforeMCPExecution` and `beforeShellExecution` fail-closed after validation (both use the same Rust devops-command-gate). Risky direct commands (raw `git push`, `wrangler deploy`/`secret`, terraform apply etc. without wrapper hint) are blocked in Agent shell and MCP. Route high-risk via `safe-devops-wrapper` / cf-exec-with-deploy-credentials / with-op-service-account-env + guard. Gap-closure (2026-06-27): re-added beforeShellExecution to close IDE enforcement gap; see CLOUDFLARE_2026..._PLAN.md §9 and DEFENSE_IN_DEPTH L0.5. Do not treat wrapper absence as skip.
 4. Route high-risk shell actions through Rust preflight wrapper (`safe-devops-wrapper`).
 5. Never bypass policy by introducing parallel non-reviewed hook scripts.
 
