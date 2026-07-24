@@ -9,6 +9,14 @@ Standalone **Rust** CLI and library: HMAC-signed `POST` to the [`email-alerts`](
 - Program index: <https://github.com/centexmsp/repository-restructuring/blob/main/docs/00_SSOT.md>
 - SSOT quick pointer (this repo): `docs/SSOT_POINTER.md`
 
+
+## Program naming (hub)
+
+This CLI is the **reusable producer** for the hub **email-alerts chain** (part of the **edge notification spine**). Prefer those names over bare “P0” in operator chat.
+
+- Naming glossary: https://github.com/centexmsp/repository-restructuring/blob/main/docs/PROGRAM_NAMING_GLOSSARY_AND_P0_ALIASES_SSOT.md
+- Shared-module rule: pin this repo; do not fork Worker source into consumers.
+
 ## Install
 
 ```bash
