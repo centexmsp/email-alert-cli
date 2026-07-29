@@ -17,6 +17,17 @@ This CLI is the **reusable producer** for the hub **email-alerts chain** (part o
 - Naming glossary: https://github.com/centexmsp/repository-restructuring/blob/main/docs/PROGRAM_NAMING_GLOSSARY_AND_P0_ALIASES_SSOT.md
 - Shared-module rule: pin this repo; do not fork Worker source into consumers.
 
+
+## Shared HMAC (G8)
+
+Crypto for `X-Email-Alert-Signature` lives in hub crate **`email-alert-hmac-v1`**
+(`repository-restructuring/crates/email-alert-hmac-v1`). This repo re-exports the producer API
+and keeps `op://` + CLI glue local.
+
+`Cargo.toml` pins a **git `rev`** of the hub package. Private-repo fetch uses the system **git CLI**
+(`.cargo/config.toml` → `net.git-fetch-with-cli = true`) so `gh`/credential helpers work.
+Offline override: path dep to a local hub checkout.
+
 ## Install
 
 ```bash

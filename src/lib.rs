@@ -1,29 +1,17 @@
-//! HMAC v1 signing for the `email-alerts` Cloudflare Worker `POST /alert` contract (SSOT: centexmsp/repository-restructuring `workers/email-alerts`).
-//! Optional reuse from [credential-manager](https://github.com/centexmsp/credential-manager) via `path` or `git` dependency.
-use hmac::Hmac;
-use hmac::KeyInit;
-use hmac::Mac;
+//! HMAC v1 signing for the `email-alerts` Cloudflare Worker `POST /alert` contract.
+//! Crypto lives in hub **`email-alert-hmac-v1`** (G8); this crate re-exports the producer API
+//! and adds `op://` materialization + `AlertJson`.
+//!
+//! SSOT: centexmsp/repository-restructuring `workers/email-alerts` + `crates/email-alert-hmac-v1`.
+
 use serde::Serialize;
-use sha2::Sha256;
 use thiserror::Error;
 
-type HmacSha256 = Hmac<Sha256>;
-
-/// Same canonical string as the Worker: `HMAC-SHA256(secret, "{ts}.{raw_body_utf8}")` → **lowercase** hex (use [`signature_header_v1`] for the full header value).
-#[must_use]
-pub fn hmac_sha256_hex(secret: &str, ts: &str, body: &str) -> String {
-    let mut mac =
-        HmacSha256::new_from_slice(secret.as_bytes()).expect("HMAC accepts arbitrary key length");
-    let msg = format!("{ts}.{body}");
-    mac.update(msg.as_bytes());
-    hex::encode(mac.finalize().into_bytes())
-}
-
-/// Full `X-Email-Alert-Signature` value, e.g. `v1=a1b2...` (lowercase hex).
-#[must_use]
-pub fn signature_header_v1(secret: &str, ts: &str, body: &str) -> String {
-    format!("v1={}", hmac_sha256_hex(secret, ts, body))
-}
+pub use email_alert_hmac_v1::{
+    email_alert_hmac_verify, email_alert_sign_hex, email_alert_signature_header_value,
+    email_alert_ts_within_skew, hmac_sha256_hex, hmac_sha256_hex_message, signature_header_v1,
+    strip_v1_email_alert_sig,
+};
 
 #[derive(Debug, Serialize)]
 pub struct AlertJson {
@@ -91,14 +79,13 @@ mod tests {
 
     #[test]
     fn hmac_vector_matches_openssl_worker_example() {
-        // Same family as workers/email-alerts: ts.body
         let secret = "s";
         let body = r#"{"subject":"x"}"#;
         let ts = "1000";
         let got = hmac_sha256_hex(secret, ts, body);
         assert_eq!(got.len(), 64);
-        // Cross-check: stable expected from worker tests (hmac_round_trip uses "s" and body)
         let sig = signature_header_v1(secret, ts, body);
         assert!(sig.starts_with("v1="));
+        assert!(email_alert_hmac_verify(secret, ts, body, &sig));
     }
 }
