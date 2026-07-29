@@ -57,6 +57,9 @@ Do **not** fork program-wide status or token policy here. Extend local `docs/` o
 
 ## Program hub (dual-host / Grok) — do not remove
 
+- **ONE command (do not type multi-step lists):** from hub run `./scripts/dual-host-bootstrap.sh --agent` (Build: `--build` · orch: `--orch`) then read hub `state/dual-host/agent-context.md`
+- **Automation SSOT:** https://github.com/centexmsp/repository-restructuring/blob/main/docs/DUAL_HOST_AGENT_AUTOMATION_SSOT.md
+
 - **Standards hub:** https://github.com/centexmsp/repository-restructuring
 - **M5 always-read:** https://github.com/centexmsp/repository-restructuring/blob/main/docs/M5_READ_ALWAYS.md
 - **Horeb always-read:** https://github.com/centexmsp/repository-restructuring/blob/main/docs/HOREB_READ_ALWAYS.md

@@ -1,62 +1,86 @@
 ---
-description: Dual-host freeze-first, PR rules, M5_READ_ALWAYS standard entry, Grok 4.5/Build. Keywords: dual-host M5 horeb carmel freeze catch-up M5_READ_ALWAYS pack
+description: Dual-host ONE command dual-host-bootstrap, freeze/PR, agent-context low tokens, Grok 4.5/Build. Keywords: dual-host M5 horeb bootstrap agent-context catch-up pack PROGRAM_DEV_ROOT wiki dual_host_session automation
 alwaysApply: true
 ---
 
 # Dual-machine freeze, catch-up, and PR enforcement
 
-## Standard entries (ALWAYS)
+## ONE command (mandatory — do not invent multi-step shell lists)
 
-| Host | First file after `git pull` hub `main` |
-|------|----------------------------------------|
+From hub `repository-restructuring`:
+
+| Who | Run |
+|-----|-----|
+| **Cursor Agent** | `./scripts/dual-host-bootstrap.sh --agent` |
+| **Grok Build CLI** | `./scripts/dual-host-bootstrap.sh --build` |
+| **Horeb orch** | `./scripts/dual-host-bootstrap.sh --orch` |
+| **Offline prompts** | `./scripts/dual-host-bootstrap.sh --print-only` |
+
+Then read **`state/dual-host/agent-context.md`** (auto-generated, low token).  
+Contract: [`docs/DUAL_HOST_AGENT_AUTOMATION_SSOT.md`](docs/DUAL_HOST_AGENT_AUTOMATION_SSOT.md).
+
+**Do not** tell the operator to type long checklists from historical guides. Bootstrap runs pull (when safe), auth/DNS diags, catch-up, board KPIs, soft MCP cues, and paste prompts.
+
+**Fleet enforcement sync (pack + AGENTS + CLAUDE adapters on consumers):**
+
+```bash
+./scripts/dual-host-enforcement-sync.sh --write
+# or TARGETS="firewall-analysis mssp-platform claude-ai-orchestration" ./scripts/dual-host-enforcement-sync.sh --write
+```
+
+After hub dual-host rule/template changes: `export-cursor-program-pack.sh` → `verify-cursor-program-pack-parity.sh` → enforcement-sync `--write` on open consumers.
+
+## Thin host entries (after bootstrap if needed)
+
+| Host | Entry |
+|------|--------|
 | **M5** | `docs/M5_READ_ALWAYS.md` |
 | **horeb** | `docs/HOREB_READ_ALWAYS.md` |
-| **Both** | Umbrella: `docs/DUAL_HOST_SYNC_SYSTEM_SSOT.md` |
+| **Umbrella law** | `docs/DUAL_HOST_SYNC_SYSTEM_SSOT.md` |
 
-On **M5/Mac** (dual-host / freeze / catch-up / pack / fleet):
+## Wiki-first (minimize Grok 4.5 context)
 
-1. `cd` hub · `git fetch && git switch main && git pull --ff-only`  
-2. Read **`docs/M5_READ_ALWAYS.md`** (stable path; freshness + archive fallback)  
-3. Run **`./scripts/dual-host-session-start.sh`** (dynamic `gh` scan + local pull; optional `PACK_TARGETS=…`)  
-4. Pack + AGENTS: `install-cursor-program-pack.sh` + `dual-host-ensure-agents.sh --write` on open consumers  
-5. Static freeze tables alone are **not** enough — live GitHub required  
+Load **only** what is missing after `agent-context.md`:
 
-GitHub: `https://github.com/centexmsp/repository-restructuring/blob/main/docs/M5_READ_ALWAYS.md`
+1. `docs/dual-host-agent-automation-ssot`
+2. `docs/dual-host-parallel-safe-lanes-ssot` (if lanes unclear)
+3. `docs/operator-session-start-and-ide-reality-ssot` §D (network/auth only)
+4. `docs/dual-host-sync-system-ssot` (architecture/law only)
 
-## Other canonical docs (after M5_READ_ALWAYS)
+**Do not** default-load: `DUAL_HOST_SINGLE_GUIDE_*`, Phase A reports, full COMPREHENSIVE, full CHANGELOG.
 
-| Doc | Role |
-|-----|------|
-| `docs/M5_NEXT_STEPS_MASTER_PLAN_2026-07-28.md` | Catch-up, pack/templates, horeb orch lane |
-| `docs/DUAL_HOST_SINGLE_GUIDE_2026-07-27.md` | Phases A–D, notify blocks, Phase A record |
-| `docs/DUAL_HOST_CURSOR_AND_GROK_BUILD_CLI_ENFORCEMENT_2026-07-27.md` | Cursor + Grok Build CLI steps |
-| `docs/DUAL_HOST_OPERATOR_PRINTABLE_CARD_2026-07-27.md` | Human daily card |
-| `docs/DUAL_HOST_PARALLEL_SAFE_LANES_SSOT.md` | When M5 + horeb may work **in parallel** (orch = horeb) |
-| `config/cursor-program/README.md` | Pack + AGENTS templates (hub → mssp → consumers) |
+## Host paths + internals
 
-**Parallel work:** horeb owns **`claude-ai-orchestration`** PG/O.2. M5 may work hub/pack/macOS/other consumers **only** when paths do not overlap — see parallel-safe lanes SSOT. Never dual-edit the same files without serial push/pull.
+- Paths: `scripts/lib-dual-host-paths.sh` — M5 `~/developer/*`, horeb `$HOME/*` and/or `~/developer/*`; **`PROGRAM_DEV_ROOT`**
+- Board: `state/dual-host/latest.md` · CI: `./scripts/verify-dual-host-system.sh`
+- Pack: `PACK_TARGETS="mssp-platform …" ./scripts/dual-host-bootstrap.sh`
+- Matrix task_class: **`dual_host_session`**
 
-**SSH:** Prefer **git pull**. Existing Cloudflare tunnel only if git fails. **Never invent** a new SSH host.
+## Parallel lanes
 
-## When dual-host / freeze / catch-up / M5 / horeb / carmel is mentioned
+- **horeb owns** `claude-ai-orchestration` PG/O.2  
+- **M5** hub/pack/macOS/other consumers when non-overlapping  
+- Never dual-edit same files without serial push/PR  
+- Detail: `docs/DUAL_HOST_PARALLEL_SAFE_LANES_SSOT.md`
 
-1. **STOP** feature work.  
-2. **M5:** load **`docs/M5_READ_ALWAYS.md`** from **main** (above).  
-3. Freeze path if still dirty multi-repo: claim `m5/*` → push → PR; **NOTIFY OPERATOR** per single guide.  
-4. Catch-up path if freezes merged: run catch-up script; **NOTIFY OPERATOR: M5 catch-up complete**.  
-5. **horeb:** orchestration PG/O.2 is horeb lane; do not dual-edit without serial push/pull.  
-6. No merge to `main` unless operator orders. No `reset --hard`. No delete `horeb/safety-park-*`.
+## When dual-host / freeze / catch-up / M5 / horeb is mentioned
+
+1. **STOP** unrelated feature work.  
+2. Run **`./scripts/dual-host-bootstrap.sh --agent`**.  
+3. Follow `agent-context.md` + automation SSOT.  
+4. Freeze still dirty multi-repo: claim `m5/*` or `horeb/*` → push → PR.  
+5. No merge to `main` unless operator orders. No `reset --hard`. No delete `horeb/safety-park-*` unread.
 
 ## Develop / push / PR (always)
 
 | Work | Action |
 |------|--------|
-| Leave this machine or ship | claim branch → push → **PR** |
+| Leave machine or ship | claim branch → push → **PR** |
 | End of day / switch host | **push required** |
-| Direct commit to `main` | **Forbidden** |
+| Direct commit to `main` | **Forbidden** (except operator-ordered hub maintenance) |
 | Secrets / `target/` / huge binaries | **Never commit** |
 
-**Models:** **`grok/grok-4.5`** (prefer **`grok/grok-4.5`** on gateway); Build loops **`grok/grok-build-0.1`**; not Auto.
+**Models:** **`grok/grok-4.5`** · Build **`grok/grok-build-0.1`** · not Auto.
 
 ## Related
 

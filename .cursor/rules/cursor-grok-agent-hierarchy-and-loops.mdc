@@ -17,9 +17,10 @@ alwaysApply: true
 
 1. **Common standards / enforcement** live only in **`repository-restructuring`** (`.cursor/rules`, pack, SSOT docs).  
 2. **Consumers** ship a **thin root `AGENTS.md`** (template: pack **`templates/AGENTS.consumer.md`** or **`AGENTS.mssp-platform.md`**). Do **not** invent **`GROK.md`**.  
-3. **`CLAUDE.md`** (if present) is a **thin adapter** (`@AGENTS.md`) — not a second standards master. Prefer pack **`templates/CLAUDE.md.adapter`**.  
+3. **`CLAUDE.md`** (if present) is a **thin adapter** (`@AGENTS.md`) — not a second standards master. Prefer pack **`templates/CLAUDE.md.adapter`** (includes dual-host bootstrap one-liner).  
 4. **Models:** program default **`grok-4.5`**; long agentic / Build loops **`grok-build-0.1`** via **`.cursor/ai-gateway.json`** (xAI Docs MCP before changing ids).  
-5. **Durable state** in git (**COMPREHENSIVE** Continue queue, CHANGELOG) — not chat history alone.
+5. **Durable state** in git (**COMPREHENSIVE** Continue queue, CHANGELOG) — not chat history alone.  
+6. **Dual-host session:** **`./scripts/dual-host-bootstrap.sh --agent`** (Build: `--build`) — never multi-step typed checklists. Fleet pack/AGENTS/CLAUDE: **`./scripts/dual-host-enforcement-sync.sh --write`**.
 
 ## Git + docs hygiene (always — Cursor and long loops)
 
