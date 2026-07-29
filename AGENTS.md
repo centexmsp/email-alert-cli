@@ -22,16 +22,20 @@ Do **not** fork program-wide status or token policy here. Extend local `docs/` o
 4. **PR-first** into default branch; no parallel machine integration branches.  
 5. **No second master status canvas** — link SSOT `COMPREHENSIVE_PROJECT_STATUS_REPORT.md`.  
 6. **Vendor docs first** for Cloudflare and xAI/Grok (SSOT + MCP).  
-7. **Deception / neutral public naming** when this repo has public security surfaces.
+7. **Deception / neutral public naming** when this repo has public security surfaces.  
+8. **Billing-starved Actions:** merge evidence = local `cargo fmt/clippy/test` — no Actions thrash.  
+9. **HMAC G8:** depend on hub `email-alert-hmac-v1` (`git`+`rev`); keep `.cargo/config.toml` `net.git-fetch-with-cli = true` for private hub. Do not re-implement `v1=` signing.  
+10. **Exclusive lane:** M5 `m5-email-alert-cli-1h` when armed.
 
 ## Local only (edit this section)
 
-- **Default branch:** `main` (or document exception).  
-- **Primary languages / packages:** _fill in_  
-- **Key services / paths:** _fill in_  
-- **Local verify commands:** _fill in_  
-- **Deploy entrypoints:** _fill in_  
-- **HITL blockers known here:** _fill in_
+- **Default branch:** `main`  
+- **Primary languages / packages:** Rust (`email_alert` lib + bins)  
+- **Key services / paths:** HMAC producer for edge **email-alerts** spine; `op://` materialize helpers  
+- **Local verify commands:** `cargo fmt --all -- --check` · `cargo clippy --all-targets --all-features -- -D warnings` · `cargo test --all-features`  
+- **Deploy entrypoints:** CLI only (Worker is hub `workers/email-alerts`)  
+- **HITL blockers known here:** vault fields for live HMAC smoke; spine secrets  
+- **Shared dep:** `email-alert-hmac-v1` from `centexmsp/repository-restructuring` @ pinned rev
 
 ## Cursor + Grok
 
