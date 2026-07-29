@@ -1,0 +1,65 @@
+---
+description: Dual-host freeze-first, PR rules, M5_READ_ALWAYS standard entry, Grok 4.5/Build. Keywords: dual-host M5 horeb carmel freeze catch-up M5_READ_ALWAYS pack
+alwaysApply: true
+---
+
+# Dual-machine freeze, catch-up, and PR enforcement
+
+## Standard entries (ALWAYS)
+
+| Host | First file after `git pull` hub `main` |
+|------|----------------------------------------|
+| **M5** | `docs/M5_READ_ALWAYS.md` |
+| **horeb** | `docs/HOREB_READ_ALWAYS.md` |
+| **Both** | Umbrella: `docs/DUAL_HOST_SYNC_SYSTEM_SSOT.md` |
+
+On **M5/Mac** (dual-host / freeze / catch-up / pack / fleet):
+
+1. `cd` hub · `git fetch && git switch main && git pull --ff-only`  
+2. Read **`docs/M5_READ_ALWAYS.md`** (stable path; freshness + archive fallback)  
+3. Run **`./scripts/dual-host-session-start.sh`** (dynamic `gh` scan + local pull; optional `PACK_TARGETS=…`)  
+4. Pack + AGENTS: `install-cursor-program-pack.sh` + `dual-host-ensure-agents.sh --write` on open consumers  
+5. Static freeze tables alone are **not** enough — live GitHub required  
+
+GitHub: `https://github.com/centexmsp/repository-restructuring/blob/main/docs/M5_READ_ALWAYS.md`
+
+## Other canonical docs (after M5_READ_ALWAYS)
+
+| Doc | Role |
+|-----|------|
+| `docs/M5_NEXT_STEPS_MASTER_PLAN_2026-07-28.md` | Catch-up, pack/templates, horeb orch lane |
+| `docs/DUAL_HOST_SINGLE_GUIDE_2026-07-27.md` | Phases A–D, notify blocks, Phase A record |
+| `docs/DUAL_HOST_CURSOR_AND_GROK_BUILD_CLI_ENFORCEMENT_2026-07-27.md` | Cursor + Grok Build CLI steps |
+| `docs/DUAL_HOST_OPERATOR_PRINTABLE_CARD_2026-07-27.md` | Human daily card |
+| `docs/DUAL_HOST_PARALLEL_SAFE_LANES_SSOT.md` | When M5 + horeb may work **in parallel** (orch = horeb) |
+| `config/cursor-program/README.md` | Pack + AGENTS templates (hub → mssp → consumers) |
+
+**Parallel work:** horeb owns **`claude-ai-orchestration`** PG/O.2. M5 may work hub/pack/macOS/other consumers **only** when paths do not overlap — see parallel-safe lanes SSOT. Never dual-edit the same files without serial push/pull.
+
+**SSH:** Prefer **git pull**. Existing Cloudflare tunnel only if git fails. **Never invent** a new SSH host.
+
+## When dual-host / freeze / catch-up / M5 / horeb / carmel is mentioned
+
+1. **STOP** feature work.  
+2. **M5:** load **`docs/M5_READ_ALWAYS.md`** from **main** (above).  
+3. Freeze path if still dirty multi-repo: claim `m5/*` → push → PR; **NOTIFY OPERATOR** per single guide.  
+4. Catch-up path if freezes merged: run catch-up script; **NOTIFY OPERATOR: M5 catch-up complete**.  
+5. **horeb:** orchestration PG/O.2 is horeb lane; do not dual-edit without serial push/pull.  
+6. No merge to `main` unless operator orders. No `reset --hard`. No delete `horeb/safety-park-*`.
+
+## Develop / push / PR (always)
+
+| Work | Action |
+|------|--------|
+| Leave this machine or ship | claim branch → push → **PR** |
+| End of day / switch host | **push required** |
+| Direct commit to `main` | **Forbidden** |
+| Secrets / `target/` / huge binaries | **Never commit** |
+
+**Models:** **`grok/grok-4.5`** (prefer **`grok/grok-4.5`** on gateway); Build loops **`grok/grok-build-0.1`**; not Auto.
+
+## Related
+
+- `pr-first-parallel-workflow-enforcement.mdc`  
+- `machine-lane-git-commit-enforcement.mdc`  
+- `cursor-grok-agent-hierarchy-and-loops.mdc`  
