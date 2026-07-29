@@ -12,5 +12,6 @@
 | Wiki fleet | [WIKI_FLEET_ROLLOUT_STATUS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/WIKI_FLEET_ROLLOUT_STATUS_SSOT.md) · [docs/WIKI_LOCAL.md](WIKI_LOCAL.md) |
 | Program sync (phase order) | [PROGRAM_SYNC_REPO_ALIGNMENT_AND_WIKI_FLEET_PLAN_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PROGRAM_SYNC_REPO_ALIGNMENT_AND_WIKI_FLEET_PLAN_SSOT.md) |
 | Machine-lane Git trailers | [MACHINE_LANE_GIT_COMMIT_STANDARD_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/MACHINE_LANE_GIT_COMMIT_STANDARD_SSOT.md) |
+| Edge notification spine (email-alerts chain) | [PROGRAM_NAMING_GLOSSARY_AND_P0_ALIASES_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PROGRAM_NAMING_GLOSSARY_AND_P0_ALIASES_SSOT.md) · [PRE_DEPLOY_SECURITY_CHECKLIST_P0_WORKERS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PRE_DEPLOY_SECURITY_CHECKLIST_P0_WORKERS_SSOT.md) · [CREDENTIAL_MANAGER_EMAIL_ALERT_REUSE.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CREDENTIAL_MANAGER_EMAIL_ALERT_REUSE.md) |
 
 Use this repo docs for module implementation details only; defer cross-repo policy decisions to SSOT.
