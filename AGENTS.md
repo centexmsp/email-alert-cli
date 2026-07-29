@@ -32,7 +32,7 @@ Do **not** fork program-wide status or token policy here. Extend local `docs/` o
 - **Default branch:** `main`  
 - **Primary languages / packages:** Rust (`email_alert` lib + bins)  
 - **Key services / paths:** HMAC producer for edge **email-alerts** spine; `op://` materialize helpers  
-- **Local verify commands:** `cargo fmt --all -- --check` · `cargo clippy --all-targets --all-features -- -D warnings` · `cargo test --all-features`  
+- **Local verify commands:** `./scripts/verify-local.sh` (optional `--quick` / `--audit`) · or raw `cargo fmt --all -- --check` · `cargo clippy --all-targets --all-features -- -D warnings` · `cargo test --all-features`  
 - **Deploy entrypoints:** CLI only (Worker is hub `workers/email-alerts`)  
 - **HITL blockers known here:** vault fields for live HMAC smoke; spine secrets  
 - **Shared dep:** `email-alert-hmac-v1` from `centexmsp/repository-restructuring` @ pinned rev

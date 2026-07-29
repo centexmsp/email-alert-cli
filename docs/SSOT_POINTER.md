@@ -14,5 +14,6 @@
 | Machine-lane Git trailers | [MACHINE_LANE_GIT_COMMIT_STANDARD_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/MACHINE_LANE_GIT_COMMIT_STANDARD_SSOT.md) |
 | Shared HMAC v1 crate | [email-alert-hmac-v1](https://github.com/centexmsp/repository-restructuring/tree/main/crates/email-alert-hmac-v1) (pin `rev` in Cargo.toml) |
 | Edge notification spine (email-alerts chain) | [PROGRAM_NAMING_GLOSSARY_AND_P0_ALIASES_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PROGRAM_NAMING_GLOSSARY_AND_P0_ALIASES_SSOT.md) · [PRE_DEPLOY_SECURITY_CHECKLIST_P0_WORKERS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PRE_DEPLOY_SECURITY_CHECKLIST_P0_WORKERS_SSOT.md) · [CREDENTIAL_MANAGER_EMAIL_ALERT_REUSE.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CREDENTIAL_MANAGER_EMAIL_ALERT_REUSE.md) |
+| Billing-safe local gates | [`scripts/verify-local.sh`](../scripts/verify-local.sh) — fmt/clippy/test (+ optional `--audit`); use when GitHub Actions minutes are starved |
 
 Use this repo docs for module implementation details only; defer cross-repo policy decisions to SSOT.
