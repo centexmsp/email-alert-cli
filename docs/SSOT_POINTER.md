@@ -15,5 +15,9 @@
 | Shared HMAC v1 crate | [email-alert-hmac-v1](https://github.com/centexmsp/repository-restructuring/tree/main/crates/email-alert-hmac-v1) (pin `rev` in Cargo.toml) |
 | Edge notification spine (email-alerts chain) | [PROGRAM_NAMING_GLOSSARY_AND_P0_ALIASES_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PROGRAM_NAMING_GLOSSARY_AND_P0_ALIASES_SSOT.md) · [PRE_DEPLOY_SECURITY_CHECKLIST_P0_WORKERS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PRE_DEPLOY_SECURITY_CHECKLIST_P0_WORKERS_SSOT.md) · [CREDENTIAL_MANAGER_EMAIL_ALERT_REUSE.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CREDENTIAL_MANAGER_EMAIL_ALERT_REUSE.md) |
 | Billing-safe local gates | [`scripts/verify-local.sh`](../scripts/verify-local.sh) — fmt/clippy/test (+ optional `--audit`); use when GitHub Actions minutes are starved |
+| **CF entitlement + mandatory obs (item 16)** | [CLOUDFLARE_ENTITLEMENT_FULL_STACK_UTILIZATION_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CLOUDFLARE_ENTITLEMENT_FULL_STACK_UTILIZATION_SSOT.md) · [CLOUDFLARE_LATEST_BEST_PRACTICES_FLEET_AUDIT_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CLOUDFLARE_LATEST_BEST_PRACTICES_FLEET_AUDIT_SSOT.md) · local [CLOUDFLARE_ENTITLEMENT_CATALOG_EAC.md](CLOUDFLARE_ENTITLEMENT_CATALOG_EAC.md) |
+| SC-HMAC-EA (shared component) | [PROGRAM_SHARED_COMPONENTS_INDEX_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PROGRAM_SHARED_COMPONENTS_INDEX_SSOT.md) **SC-HMAC-EA** — **do not** reimplement `v1=` signing |
 
 Use this repo docs for module implementation details only; defer cross-repo policy decisions to SSOT.
+
+**Last updated:** 2026-07-30 (entitlement item 16 + SC-HMAC-EA)
