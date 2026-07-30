@@ -235,7 +235,7 @@ dependencies = [
 [[package]]
 name = "email-alert-hmac-v1"
 version = "0.1.0"
-source = "git+https://github.com/centexmsp/repository-restructuring?rev=ecdf3658485b69ade057b304e811d145cc81befd#ecdf3658485b69ade057b304e811d145cc81befd"
+source = "git+https://github.com/centexmsp/email-alert-hmac-v1?rev=7f9ac51107e7331de4c6ee14d6a27f0f2f27736d#7f9ac51107e7331de4c6ee14d6a27f0f2f27736d"
 dependencies = [
  "hex",
  "hmac",
