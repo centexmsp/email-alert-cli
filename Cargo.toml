@@ -17,9 +17,8 @@ name = "email-alert"
 path = "src/main.rs"
 
 [dependencies]
-# G8: shared HMAC v1 from hub (pinned rev). Requires git credentials for private hub
-# (cargo uses git CLI via .cargo/config.toml net.git-fetch-with-cli = true).
-email-alert-hmac-v1 = { git = "https://github.com/centexmsp/repository-restructuring", rev = "ecdf3658485b69ade057b304e811d145cc81befd", package = "email-alert-hmac-v1" }
+# SC-HMAC-EA: dedicated shared module (pinned full rev). Private git + git-fetch-with-cli.
+email-alert-hmac-v1 = { git = "https://github.com/centexmsp/email-alert-hmac-v1", rev = "7f9ac51107e7331de4c6ee14d6a27f0f2f27736d" }
 clap = { version = "4.5", features = ["derive", "env"] }
 reqwest = { version = "0.12", default-features = false, features = ["rustls-tls", "blocking"] }
 serde = { version = "1.0", features = ["derive"] }
