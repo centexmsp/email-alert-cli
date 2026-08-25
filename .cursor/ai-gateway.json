@@ -7,14 +7,16 @@
     "op://developer/dc3hhwsadxe2irj35c55wv32t4/credential"
   ],
   "agentContract": "config/cursor-workstation-agent-contract.json",
-  "defaultModel": "grok-4.5",
+  "defaultModel": "grok-4.6",
   "fastModel": "grok-4-fast",
   "buildModel": "grok-build-0.1",
   "verifiedChatModels": [
+    "grok-4.6",
     "grok-4.5",
     "grok-4.3",
     "grok-4-fast",
     "grok-build-0.1",
+    "grok/grok-4.6",
     "grok/grok-4.5",
     "grok/grok-4.3",
     "grok/grok-4-fast",
@@ -24,5 +26,5 @@
     "grok/grok-4.20-0309-reasoning",
     "grok/grok-4.20-0309-non-reasoning"
   ],
-  "notes": "2026-07-22: defaultModel grok-4.5 per xAI Docs MCP developers/grok-4-5 + developers/models (coding/agent primary). grok-build-0.1 retained as buildModel for long agentic loops. Cursor Settings custom model field rejects ids containing '/' — use bare xAI slug as default; keep grok/grok-* for gateway scripts. Vendor: https://docs.x.ai/developers/models"
+  "notes": "2026-08-24: defaultModel grok-4.6 per xAI Docs MCP developers/grok-4-6 + developers/models (coding/chat primary; 500k context; reasoning_effort low/medium/high/xhigh). grok-build-0.1 retained as buildModel for cheaper long agentic loops (256k). grok-4.5 kept on verified list as fallback. Cursor Settings custom model field rejects ids containing '/' — use bare xAI slug as default; keep grok/grok-* for gateway scripts. Cache: prompt_cache_key / x-grok-conv-id. Long loops: context compaction. Price doubles at >=200k prompt tokens — wiki-first. Vendor: https://docs.x.ai/developers/models"
 }

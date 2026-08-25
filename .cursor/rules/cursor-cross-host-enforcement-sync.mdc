@@ -23,7 +23,7 @@ alwaysApply: true
 
 | Step | Command / action |
 |------|------------------|
-| Gateway models | **`./scripts/restore-cursor-cf-gateway-after-upgrade.sh`** → re-apply Cursor **Models → OpenAI** custom ids from **`.cursor/ai-gateway.json`** (**default `grok-4.5`**, build **`grok-build-0.1`**) |
+| Gateway models | **`./scripts/restore-cursor-cf-gateway-after-upgrade.sh`** → re-apply Cursor **Models → OpenAI** custom ids from **`.cursor/ai-gateway.json`** (**default `grok-4.6`**, build **`grok-build-0.1`**) |
 | Gateway smoke | **`SMOKE_QUICK=1 ./scripts/smoke-ai-gateway-json-models.sh`** |
 | MCP envFile | **`./scripts/merge-mcp-json-envfile-centex.sh`** |
 | Wiki MCP | **`./scripts/ci-llm-wiki-bootstrap.sh`** + **`./scripts/merge-cursor-mcp-wiki-centex.sh`** |

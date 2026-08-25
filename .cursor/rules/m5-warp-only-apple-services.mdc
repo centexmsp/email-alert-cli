@@ -1,0 +1,69 @@
+---
+description: M5 preferred path is Cloudflare WARP Team (centexmsp) without ProtonVPN; Apple ID / iMessage / Hide My Email and Microsoft Defender for Endpoint macOS / MAU OneCDN diagnostics; Gateway split-tunnel + named list-backed Do Not Inspect rules. Use when Apple login fails, Hide My Email breaks, iMessage fails, Defender wdav-upgrade.pkg blocked, onecdn MITM, or after Wi-Fi/location change on carmel/M5.
+globs:
+alwaysApply: false
+---
+
+# M5 WARP-only + Apple + Microsoft Defender services (carmel)
+
+## Preferred posture
+
+1. **Quit ProtonVPN** (app may linger — default route must **not** be Proton WireGuard `utun`).
+2. **Cloudflare WARP** enrolled **Organization: centexmsp**, status **Connected**, mode **`WarpWithDnsOverHttps`** (`warp-cli mode warp+doh`).
+3. Confirm: `curl -sS https://www.cloudflare.com/cdn-cgi/trace` → **`warp=on` `gateway=on`**.
+4. GitHub plain path: `./scripts/diagnose-m5-github-dns.sh` → plain curl **200** when WARP DNS stubs healthy.
+
+## Do not invent parallel VPN stacks
+
+- Preferred ZT path = **WARP + Gateway** (Access-controlled Team).
+- Proton is **legacy coexistence** only; dual-stack caused dead DNS (`127.0.2.2`) historically — see [OPERATOR_SESSION_START_AND_IDE_REALITY_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/OPERATOR_SESSION_START_AND_IDE_REALITY_SSOT.md) **§D**.
+
+## Apple / iMessage / Hide My Email
+
+| Symptom | Likely cause | Action |
+|---------|--------------|--------|
+| Apple ID / iCloud login **stuck** | Usually **not** MITM (re-probe first) | `./scripts/diagnose-m5-warp-apple-services.sh`; issuer must be **Apple**. Prefer **named SNI DNI** list **Centex Apple iCloud AppleID - Do Not Inspect hosts** (keep CDN **in tunnel**). Quit **ProtonVPN** fully. Bounce: `killall appleaccountd accountsd akd cloudd`. See OPERATOR **§D.6.1** |
+| Apple ID cannot sign in | Auth hosts MITM or IdP | Same diag; if issuer is **Gateway CA** → extend DNI list (named FQDN only) |
+| iMessage offline | APNs UDP/TCP via tunnel | Split exclude **`17.0.0.0/8`** on device profiles (already program default) |
+| Hide My Email broken | **`mask.icloud.com` → Akamai `172.224/12` outside 17/8** | **Narrow** host split-tunnel: `mask.icloud.com`, `mask-h2.icloud.com`, `mask-api.icloud.com`, `*.apple-dns.net` + DNI list (not Akamai CIDR) |
+| curl mask TLS `illegal parameter` with route on **en0** | Apple/Akamai client TLS (not CF MITM) | Test in **System Settings**; CLI LibreSSL is not authoritative |
+
+## Microsoft Defender for Endpoint (macOS) / MAU OneCDN
+
+| Symptom | Likely cause | Action |
+|---------|--------------|--------|
+| Defender cannot download updates / `wdav-upgrade.pkg` fails | Gateway **TLS decrypt** on Microsoft product CDN (HSTS/pinning-sensitive) | `./scripts/diagnose-m5-warp-microsoft-defender.sh` — OneCDN issuer must be **Microsoft**, not **Gateway CA** |
+| `https://res.public.onecdn.static.microsoft/.../MacAutoupdate/wdav-upgrade.pkg` blocked or untrusted | Same MITM class as Apple CDN | Named DOMAIN list **Centex Microsoft macOS Defender MAU - Do Not Inspect hosts** + HTTP rule **Centex Microsoft macOS Defender/MAU - Do Not Inspect** (`action=off`). See OPERATOR **§D.7** |
+| Office 365 app DNI alone insufficient | Auto-generated O365 apps ≠ OneCDN product plane | Keep **OS-scoped Microsoft macOS list** separate from generic O365 rule |
+
+### Security balance (mandatory)
+
+1. **Prefer Do Not Inspect** (named FQDNs via **Gateway lists**, one list per OS/vendor plane) over split-tunnel.
+2. **Never** add broad Akamai CIDRs (`172.224/12`, bare `akamaiedge.net`, bare `edgekey.net`) — multi-tenant unknown hosting.
+3. **Do not** DNI bare parent **`apple.com`** or bare **`microsoft.com`** (too wide); use specific hosts + intentional parents only when justified (`icloud.com`, `cdn-apple.com`, `onecdn.static.microsoft`, `static.microsoft` for product CDN plane).
+4. Split-tunnel only for proven gaps (HME Akamai edge + `17/8`). Product CDN stays **in tunnel under DNI**.
+5. Name rules **`Centex <Vendor> <OS/plane> - Do Not Inspect`** so multi-tenant Gateway stays auditable.
+
+Manifests:
+
+- Apple split: `config/warp-macos-apple-split-tunnel-excludes.txt`
+- Microsoft DNI hosts: `config/warp-macos-microsoft-defender-dni-hosts.txt`
+
+Plan + history: `docs/reports/CARMEL_WARP_APPLE_SPLIT_TUNNEL_PLAN-20260619.md`  
+SSOT procedure: OPERATOR_SESSION **§D.6** · **§D.6.1** · **§D.7**
+
+## Agent automation
+
+```bash
+./scripts/diagnose-m5-warp-apple-services.sh
+./scripts/diagnose-m5-warp-microsoft-defender.sh
+./scripts/diagnose-m5-github-dns.sh
+./scripts/dual-host-bootstrap.sh --agent   # after network healthy
+```
+
+Mutations to Gateway lists / split tunnel: Cloudflare API MCP **GET first**, then guarded **PATCH/PUT**; never force-push; document in COMPREHENSIVE + CHANGELOG same change set.
+
+## Vendor docs
+
+Before changing WARP/Gateway: Cloudflare docs MCP — [Split Tunnels](https://developers.cloudflare.com/cloudflare-one/team-and-resources/devices/cloudflare-one-client/configure/route-traffic/split-tunnels/), [TLS decryption limitations](https://developers.cloudflare.com/cloudflare-one/traffic-policies/http-policies/tls-decryption/), [Do Not Inspect](https://developers.cloudflare.com/cloudflare-one/traffic-policies/http-policies/#do-not-inspect).  
+Microsoft: [Defender standard connectivity URLs (commercial)](https://learn.microsoft.com/en-us/defender-endpoint/standard-device-connectivity-urls-commercial) (Mac/Linux rows + OneCDN ChannelURL).
