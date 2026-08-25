@@ -10,7 +10,8 @@ alwaysApply: true
 1. Default every non-trivial slice to **PR-oriented execution**:
    - shape changes into reviewable units,
    - preserve concise validation evidence,
-   - keep branch/commit flow compatible with `gh pr create`.
+   - keep branch/commit flow compatible with `gh pr create`,
+   - **merge with squash** (`gh pr merge --squash --delete-branch`) per [CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md) **§6** (operator 2026-07-30); under billing-starved Actions use local merge evidence before admin override.
    - Long autonomous loops: [CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md) + [cursor-grok-agent-hierarchy-and-loops.mdc](cursor-grok-agent-hierarchy-and-loops.mdc).
 
 2. For work that can parallelize safely, prefer Cursor **3.3+ / 3.11+** primitives:

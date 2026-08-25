@@ -80,7 +80,7 @@ Load **only** what is missing after `agent-context.md`:
 | Direct commit to `main` | **Forbidden** (except operator-ordered hub maintenance) |
 | Secrets / `target/` / huge binaries | **Never commit** |
 
-**Models:** **`grok/grok-4.5`** · Build **`grok/grok-build-0.1`** · not Auto.
+**Models:** **`grok/grok-4.6`** · Build **`grok/grok-build-0.1`** · not Auto.
 
 ## Related
 

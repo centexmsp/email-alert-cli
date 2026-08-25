@@ -1,13 +1,16 @@
 ---
-description: New Cloudflare Workers and edge control-plane code default to Rust (workers-rs); TypeScript Workers are not the default for new services.
+description: New Cloudflare Workers default to Rust (workers-rs); mandatory Workers Logs+Traces; prefer Rust when CF best practices have a Rust equivalent; Business Pro + paid Workers full-stack utilization; TypeScript Workers only with ADR.
 alwaysApply: true
 ---
 
-# Rust-first Cloudflare Workers
+# Rust-first Cloudflare Workers (+ mandatory observability)
 
 1. **New Cloudflare Workers** (including alert dispatchers, bridges, and security control-plane entrypoints) MUST be implemented in **Rust** using **`workers-rs`** + **`worker-build`** + global **`wrangler`**, matching patterns such as `service-bridge`, `workers/email-alerts/`, and neutral control-plane trees like `workers/profile-sync-service/` (see `docs/PROFILE_SYNC_CONTROL_PLANE_SSOT.md`).
 2. **Do not** introduce a **TypeScript/JavaScript Worker** as the primary implementation for new edge services unless a short **ADR** exists documenting why Rust is not feasible (same bar as `docs/STANDARDS_SSOT.md` §1 *Exception path*).
 3. When editing any Worker in this program, **check the language**: if the repo already has a Rust Worker pattern, extend Rust; do not add a parallel TS Worker “for speed” without ADR sign-off.
 4. **TS/JS is not forbidden everywhere** — it is **bounded** in `docs/STANDARDS_SSOT.md`: **Wasm/`worker-build` glue**, **vendor-documented JS/TS-only APIs** (today: **Cloudflare Workflows** — see `docs/workers/P0_SECURITY_PIPELINE_WORKFLOW_TYPESCRIPT_ADR.md`), and **legacy/UI** until parity. Prefer Rust for all other edge and control-plane code.
+5. **Mandatory observability:** every first-party Worker wrangler config MUST include **`[observability]`** + **logs** + **`[observability.traces] enabled = true`** (snippet: `config/p0-workers-observability.snippet.toml`). Gate: `./scripts/verify-workers-observability-fleet.sh`. Rust Workers use **platform auto-spans** + structured **`correlation_id`** / **SC-CFOT**; custom JS `enterSpan`/`startActiveSpan` only on ADR TS surfaces until workers-rs exposes equivalent APIs — then implement in **Rust reuse** first.
+6. **Best-practice Rust equivalent:** If Cloudflare documents a best practice and a **Rust path exists** (bindings, workers-rs, shared crate), **always prefer Rust** for security. Do not ship a TS-only convenience path for security-sensitive edge logic.
+7. **Entitlement:** maximize **Business Pro + paid Workers** on **`*.centexmsp.net`** per `docs/CLOUDFLARE_ENTITLEMENT_FULL_STACK_UTILIZATION_SSOT.md` (AutoRAG/AI Gateway/WAF/ZT/Queues/DO/etc. — use, defer-with-ADR, or N/A). Research → audit → deploy → validate loop until KPI gates clear.
 
-**Canonical detail**: `docs/STANDARDS_SSOT.md` (Language Strategy), `docs/SECURITY_RESEARCH_AND_ALERTING_SSOT.md` §8.3 (`workers/email-alerts`).
+**Canonical detail**: `docs/STANDARDS_SSOT.md` (Language Strategy), `docs/CLOUDFLARE_ENTITLEMENT_FULL_STACK_UTILIZATION_SSOT.md`, `docs/SECURITY_RESEARCH_AND_ALERTING_SSOT.md` §8.3 (`workers/email-alerts`).

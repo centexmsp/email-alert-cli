@@ -1,7 +1,7 @@
 ---
 description: >-
   AGENTS.md hierarchy (no GROK.md); autonomous no-HITL loops + PR; Cursor
-  upgrade restore (gateway/MCP/hooks); side chats; grok-4.5 / grok-build-0.1
+  upgrade restore (gateway/MCP/hooks); side chats; grok-4.6 / grok-build-0.1
 alwaysApply: true
 ---
 
@@ -18,7 +18,7 @@ alwaysApply: true
 1. **Common standards / enforcement** live only in **`repository-restructuring`** (`.cursor/rules`, pack, SSOT docs).  
 2. **Consumers** ship a **thin root `AGENTS.md`** (template: pack **`templates/AGENTS.consumer.md`** or **`AGENTS.mssp-platform.md`**). Do **not** invent **`GROK.md`**.  
 3. **`CLAUDE.md`** (if present) is a **thin adapter** (`@AGENTS.md`) — not a second standards master. Prefer pack **`templates/CLAUDE.md.adapter`** (includes dual-host bootstrap one-liner).  
-4. **Models:** program default **`grok-4.5`**; long agentic / Build loops **`grok-build-0.1`** via **`.cursor/ai-gateway.json`** (xAI Docs MCP before changing ids).  
+4. **Models:** program default **`grok-4.6`**; long agentic / Build loops **`grok-build-0.1`** via **`.cursor/ai-gateway.json`** (xAI Docs MCP before changing ids). **`reasoning_effort`:** default **high**; use **`xhigh`** only for hardest debug (4.6-only). Keep prompts under the **200k** long-context price cliff (wiki-first).  
 5. **Durable state** in git (**COMPREHENSIVE** Continue queue, CHANGELOG) — not chat history alone.  
 6. **Dual-host session:** **`./scripts/dual-host-bootstrap.sh --agent`** (Build: `--build`) — never multi-step typed checklists. Fleet pack/AGENTS/CLAUDE: **`./scripts/dual-host-enforcement-sync.sh --write`**.
 
@@ -38,7 +38,7 @@ Follow [CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md](https://github.com/cente
 
 - **Allowed:** docs/SSOT/wiki, fleet policy/AGENTS, local verify, scoped dep hygiene, code-reuse audits, PR slices.  
 - **Forbidden without HITL:** token mint/revoke, deploy-token broaden, interactive `op signin` when no SA/Keychain, unguarded `wrangler deploy`/secrets, production DNS/Access cutover.  
-- Every loop tick: research-first, gates before “done”, machine-lane commit trailer, **push**, no uncommitted merge-ready work.
+- Every loop tick: research-first, **no assumptions unless in context** (verify `gh`/logs/API/git HEAD + vendor docs; gap-analyze before “done”), gates before “done”, machine-lane commit trailer, **push**, no uncommitted merge-ready work.
 
 ## Cursor product features (use when helpful)
 
