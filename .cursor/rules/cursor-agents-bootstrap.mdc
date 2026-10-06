@@ -2,7 +2,7 @@
 description: >-
   Default workflow is canvas + SSOT + standards; AGENTS hierarchy + loops;
   one optional /ssot-program-mentor. No mandatory subagent nudges.
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Agent bootstrap (SSOT)

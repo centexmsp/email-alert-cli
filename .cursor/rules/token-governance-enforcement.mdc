@@ -1,6 +1,6 @@
 ---
 description: Enforce consolidated Cloudflare token strategy, guard preflights, and documentation anti-sprawl. GitHub Actions Workers deploy (cloudflare/wrangler-action), provider secret CLOUDFLARE_API_TOKEN vs OIDC short-lived credentials, CF API-token secret scanning and DLP — pair MCP hub section 1e, CONTINUE section 3b, TOKEN_DOCUMENTATION_INDEX Cursor+MCP. Operator mint requests — paste TOKEN_CREATION_CHECKLIST verbatim: Mint request discipline (token name + exact scopes + program values in chat) + named blocks (human-readable steps + CF- title + Operator mint request table when present).
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Token Governance Enforcement

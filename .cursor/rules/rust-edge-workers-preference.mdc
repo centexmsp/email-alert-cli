@@ -1,6 +1,6 @@
 ---
 description: New Cloudflare Workers default to Rust (workers-rs); mandatory Workers Logs+Traces; prefer Rust when CF best practices have a Rust equivalent; Business Pro + paid Workers full-stack utilization; TypeScript Workers only with ADR.
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Rust-first Cloudflare Workers (+ mandatory observability)

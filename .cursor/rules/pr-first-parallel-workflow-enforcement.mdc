@@ -1,35 +1,9 @@
 ---
 description: >-
-  PR-first parallel workflow; multitask/side chats; autonomous loop no-HITL
-  lanes and PR body Machine context
+  PR-first parallel workflow; squash merge; local review before push; Actions freeze
 alwaysApply: true
 ---
 
-# PR-first parallel workflow enforcement
+# PR-first
 
-1. Default every non-trivial slice to **PR-oriented execution**:
-   - shape changes into reviewable units,
-   - preserve concise validation evidence,
-   - keep branch/commit flow compatible with `gh pr create`,
-   - **merge with squash** (`gh pr merge --squash --delete-branch`) per [CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md) **§6** (operator 2026-07-30); under billing-starved Actions use local merge evidence before admin override.
-   - Long autonomous loops: [CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md) + [cursor-grok-agent-hierarchy-and-loops.mdc](cursor-grok-agent-hierarchy-and-loops.mdc).
-
-2. For work that can parallelize safely, prefer Cursor **3.3+ / 3.11+** primitives:
-   - **Build in Parallel** and `/multitask` for independent lanes,
-   - **side chats** (`/side`, `/btw`) for read-heavy tangents while main agent continues,
-   - keep dependent steps serialized.
-
-3. Background automation must run through **host-managed** schedulers and never compete with foreground interactivity:
-   - **macOS (M5/carmel):** `launchd`, `macos-run-background-program-tasks.sh`, [`install-background-runner-launchagent.sh`](https://github.com/centexmsp/repository-restructuring/blob/main/scripts/install-background-runner-launchagent.sh)
-   - **RHEL 10.x (Intel/horeb):** user **`systemd`** timers/services ([`config/systemd/background-task-health.timer`](https://github.com/centexmsp/repository-restructuring/blob/main/config/systemd/background-task-health.timer)), `./scripts/run-background-program-tasks.sh` with **`BG_LOCK_CONFLICT_EXIT_OK=1`**
-   - foreground pressure gets priority on both hosts; background heavy lanes self-throttle using dynamic guard signals ([`BACKGROUND_TASK_AUTOMATION_SSOT.md`](https://github.com/centexmsp/repository-restructuring/blob/main/docs/BACKGROUND_TASK_AUTOMATION_SSOT.md))
-
-4. Do not introduce ad-hoc duplicate background owners:
-   - keep single-owner lock semantics enabled,
-   - document any override in SSOT status rows.
-
-5. Every PR-workflow policy change must update SSOT docs in the same slice:
-   - `CONTINUE_ENGINEERING_PLAYBOOK_SSOT.md`
-   - `BACKGROUND_TASK_AUTOMATION_SSOT.md`
-   - `FOREGROUND_BACKGROUND_TASK_CONTROL_PLANE_SSOT.md`
-   - `COMPREHENSIVE_PROJECT_STATUS_REPORT.md` and `CHANGELOG.md`
+Non-trivial slices: reviewable PR into `main`, **squash** (`gh pr merge --squash --delete-branch`). Hosted Actions frozen → local gates are merge evidence. Review: `/review-bugbot` + `/review-security` before push; Bugbot Autofix Off. Canonical: [CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md) **§6**. Independent lanes only for `/multitask`. Pre-slim: [archive](https://github.com/centexmsp/repository-restructuring/blob/main/docs/archive/2026-09/cursor-rules/pr-first-parallel-workflow-enforcement.mdc).

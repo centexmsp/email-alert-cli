@@ -1,6 +1,6 @@
 ---
 description: Before planning Cloudflare/DNS/tokens, use API MCP and 1Password SSOT; never claim inability without checking AGENT_AUTOMATION_CLOUDFLARE_PLAYBOOK_SSOT.
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Cloudflare and secrets: agent execution

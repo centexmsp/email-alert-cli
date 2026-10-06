@@ -1,6 +1,6 @@
 ---
 description: Two-way Cursor enforcement sync (M5 macOS ↔ Intel RHEL 10.x); export/import config/cursor-program pack; cross-host model + MCP parity
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Cursor cross-host enforcement sync (M5 ↔ Intel RHEL 10.x)

@@ -1,6 +1,6 @@
 ---
 description: Enforce CI/DevOps/DevSecOps hard gates, dashboard metrics, and AI-era supply-chain protections across all private repos.
-alwaysApply: true
+alwaysApply: false
 ---
 
 # DevSecOps Enforcement

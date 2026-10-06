@@ -1,0 +1,20 @@
+---
+description: >-
+  GitHub Actions hosted freeze; Dependabot Class F; never gh workflow enable
+  without enable-one; local merge evidence; Cloudflare offload vs rustc;
+  ACTIONS_HOSTED_MODE job gates; month-start minute burn
+alwaysApply: true
+---
+
+# GitHub Actions hosted freeze enforcement
+
+**Canonical prose:** [GITHUB_ACTIONS_USAGE_AND_OFFLOAD_AUDIT_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/GITHUB_ACTIONS_USAGE_AND_OFFLOAD_AUDIT_SSOT.md) **§0.5–0.9**.  
+**Local merge checklist:** [LOCAL_PR_MERGE_EVIDENCE_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/LOCAL_PR_MERGE_EVIDENCE_SSOT.md) (**LOCAL-MERGE-EVIDENCE-1** · **LOCAL-MERGE-FREEZE-HOLD-1** · **LOCAL-MERGE-HUB-BUNDLE-1** · **LOCAL-MERGE-SECURITY-1** · **LOCAL-MERGE-PR-BODY-1**).
+
+1. **Do not thaw Dependabot** — keep **`updates: []`** / Class F until a full calendar week of **zero** `event=dynamic` on the private fleet. API **cannot** disable Dependabot Updates (**422**).
+2. **Do not** `gh workflow enable` / API-enable YAML workflows casually. Re-enable **only** via [`scripts/enable-one-github-actions-workflow.sh`](https://github.com/centexmsp/repository-restructuring/blob/main/scripts/enable-one-github-actions-workflow.sh) after billing trust — never bulk unfreeze.
+3. **Do not buy GitHub minutes** until freeze residual clears (D-BILL parked).
+4. **Merge evidence while freeze holds** = trusted-host local gates per **LOCAL-MERGE-EVIDENCE-1** (`cargo fmt/clippy/test`, consumer `verify-*.sh`, hub `verify-ssot-program-operating-docs.sh`); paste exit-0 evidence in the PR body (**LOCAL-MERGE-PR-BODY-1**). Prefer cleaner code **before** `git push` so a future single hosted workflow stays rare and green.
+5. **Consumer `ci.yml`:** keep **`disabled_manually`** + job `if:` gated on **`vars.ACTIONS_HOSTED_MODE`** (`all` / matching `one`). Setting **`ACTIONS_HOSTED_MODE=freeze`** (or unset) must no-op jobs even if someone re-enables the workflow.
+6. **Cloudflare Business Pro + paid Workers** for health Cron, `edge-ci-webhook`, email-alerts, Workers Builds (Worker deploys only). **Containers** = bounded probes only — **not** cargo workspace / CodeQL / Semgrep.
+7. **Census / freeze tools:** `FREEZE_ALL_PRIVATE=1 ./scripts/freeze-github-actions-workflows.sh` · `./scripts/check-actions-freeze-residual.sh` · `./scripts/assert-hosted-actions-yaml-frozen.sh` · `./scripts/github-actions-economics-snapshot.sh`.

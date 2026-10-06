@@ -2,7 +2,7 @@
 description: >-
   AGENTS.md hierarchy (no GROK.md); autonomous no-HITL loops + PR; Cursor
   upgrade restore (gateway/MCP/hooks); side chats; grok-4.6 / grok-build-0.1
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Cursor / Grok agent hierarchy + autonomous loops
@@ -45,6 +45,7 @@ Follow [CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md](https://github.com/cente
 - **Side chats** (`/side`, `/btw`) for research/tangents without derailing the main agent.  
 - **Agents Window transcript search** (Cmd+K) / in-thread Cmd+F — prefer over re-pasting full SSOT.  
 - **Build in Parallel** / **`/multitask`** for independent lanes ([pr-first-parallel-workflow-enforcement.mdc](pr-first-parallel-workflow-enforcement.mdc)).  
+- **PR review (hybrid, 2026-08-24):** emulate locally with **`/review-bugbot`** (multi-file / security) and **`/review-security`** (auth / Workers / tokens / HMAC) **before push**. Hosted Bugbot is mention-only / once-per-PR. **Autofix / Cloud Agent Off.** Canonical: [CURSOR_AUTONOMOUS_LOOP §6.2](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CURSOR_AUTONOMOUS_LOOP_AND_PR_WORKFLOW_SSOT.md).  
 - **Cloud agent conversation hooks** (vendor) do **not** replace local fail-closed **`.cursor/hooks.json`** + **`devops-command-gate-rs`**.
 
 ## After every Cursor app upgrade (mandatory)

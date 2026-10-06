@@ -1,6 +1,6 @@
 ---
 description: Enforcement pointer for WAF/Rulesets work — canonical prose is AGENT_AUTOMATION_CLOUDFLARE_PLAYBOOK_SSOT.md §1.2 + §2.2 only.
-alwaysApply: true
+alwaysApply: false
 ---
 
 # WAF + program deployment (enforcement only)

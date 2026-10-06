@@ -1,6 +1,6 @@
 ---
 description: Enforce Rust-based Cursor hooks, MCP/shell mutation review, and GitHub-backed policy sync across all instances.
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Cursor Policy Enforcement

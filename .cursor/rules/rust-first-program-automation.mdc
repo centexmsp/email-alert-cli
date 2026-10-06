@@ -1,19 +1,9 @@
 ---
 description: >-
-  New program automation (matrix/breadth runners, Ollama probes, op/materialize helpers,
-  security sensor fan-out SC-FANOUT) belongs in Rust crates under crates/; bash stays thin wrappers.
-  Reuse SC-HMAC-EA — no new openssl HMAC in bash.
+  New program automation in Rust crates/; bash thin wrappers; reuse SC-HMAC-EA; no new openssl HMAC
 alwaysApply: true
 ---
 
-# Rust-first program automation (repo-root)
+# Rust-first program automation
 
-1. **Canonical prose:** [STANDARDS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/STANDARDS_SSOT.md) **Language Strategy** (Workers + **program automation** bullets); inventory + **`scripts/`** backlog: [RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md) (**§9**, **Appendix A**); shared catalog [PROGRAM_SHARED_COMPONENTS_INDEX_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/PROGRAM_SHARED_COMPONENTS_INDEX_SSOT.md).
-2. **New automation** — matrix legs, background orchestration, **local Ollama probes**, **`op`/vault resolution**, P0 materialize paths, **security sensor producer fan-out** — ships as **Rust** in **`crates/*`** (for example **`background-prompt-sweep`**, **`prompt-context-feedback`**, **`p0-op-materialize`**, **`security-alert-fanout`** / **SC-FANOUT**). **`scripts/*.sh`** remain **thin wrappers** that **`cargo run -p …`** with stable env contracts.
-3. **Reuse before rewrite:** email-alerts HMAC = **SC-HMAC-EA** only; sensor fan-out = **SC-FANOUT** (reuses SC-HMAC-EA). **Do not** add new openssl/`printf` HMAC or duplicate ureq post helpers in bash or ad-hoc crates.
-4. **Do not** add new parallel **Python** orchestration for program automation. **`measure-prompt-context-coverage.py`** is **grandfathered** until a Rust port matches coverage behavior; extend **`background-prompt-sweep`** or **`prompt-context-feedback`** instead.
-5. **Cloudflare Workers** stay under **[rust-edge-workers-preference.mdc](rust-edge-workers-preference.mdc)** (`workers-rs` + **`worker-build`**).
-6. **Bash migration backlog:** every root **`scripts/*.sh`** has a default disposition row in [RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md) **Appendix A** (maintained by **`cargo run -p ssot-shell-register -- generate`**); CI drift: **`cargo run -p ssot-shell-register -- check`** via **`scripts/verify-ssot-program-operating-docs.sh`**. Follow **§9.2** deprecation when Rust replaces a script — **no** long-lived duplicate implementations.
-7. **`.sh` only when necessary:** GitHub **`gh`/Actions** glue, **`wrangler`/`op` subprocess** shims, POSIX **`install-*`** — not new business logic. Justify anything else in the same change set (STANDARDS **Exception path**).
-
-**Background runner SSOT:** [BACKGROUND_TASK_AUTOMATION_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/BACKGROUND_TASK_AUTOMATION_SSOT.md).
+New matrix/Ollama/`op`/fan-out automation → **`crates/`**. `scripts/*.sh` = thin `cargo run -p` wrappers. HMAC = **SC-HMAC-EA** only. Workers → `rust-edge-workers-preference.mdc` (requestable). Canonical: [STANDARDS_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/STANDARDS_SSOT.md) Language Strategy · [RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md](https://github.com/centexmsp/repository-restructuring/blob/main/docs/RUST_FIRST_PROGRAM_NON_RUST_INVENTORY_SSOT.md). Pre-slim: [archive](https://github.com/centexmsp/repository-restructuring/blob/main/docs/archive/2026-09/cursor-rules/rust-first-program-automation.mdc).

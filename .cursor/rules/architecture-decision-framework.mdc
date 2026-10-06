@@ -1,6 +1,6 @@
 ---
 description: Formalizes SSOT responsibilities, repo roles (repository-restructuring vs consumers like osint-platform), sync strategies, database decisions, submodule vs crate logic, and R2 backup standards. Always active.
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Architecture Decision Framework

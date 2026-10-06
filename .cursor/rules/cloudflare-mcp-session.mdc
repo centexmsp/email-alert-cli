@@ -1,6 +1,6 @@
 ---
 description: Cloudflare MCP + Cursor persistence — wrapper token, project mcp.json, verification after IDE updates.
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Cloudflare MCP and Cursor persistence

@@ -39,7 +39,7 @@ Do **not** fork program-wide status or token policy here. Extend local `docs/` o
 
 ## Cursor + Grok
 
-- Rules: `.cursor/rules/` from program pack (do not duplicate SSOT prose).  
+- Rules: `.cursor/rules/` matches the hub pack except `rf-sdr-multimodal-lab-enforcement.mdc` (RF lab only). Always-on text is the hub short set. Pre-slim bodies stay in the hub archive `docs/archive/2026-09/cursor-rules/`. A full `install-cursor-program-pack.sh` copies the RF rule back; remove that one file afterward.  
 - Models: hub [`.cursor/ai-gateway.json`](https://github.com/centexmsp/repository-restructuring/blob/main/.cursor/ai-gateway.json). Default **grok-4.7**, fast **grok-4.6**, long Build **grok-build-0.1**. Not Auto.  
 - Optional subagents: copy from SSOT `.cursor/agents/` only when needed.  
 - Loops: durable state in git/SSOT Continue queue — not chat history.

@@ -1,6 +1,6 @@
 ---
 description: Enforce standalone shared-module repositories, parity-gated migration, and CI policy wiring for consumer repos.
-alwaysApply: true
+alwaysApply: false
 ---
 
 # Shared Module Integration Enforcement
