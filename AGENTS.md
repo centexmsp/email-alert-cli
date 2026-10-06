@@ -40,7 +40,7 @@ Do **not** fork program-wide status or token policy here. Extend local `docs/` o
 ## Cursor + Grok
 
 - Rules: `.cursor/rules/` from program pack (do not duplicate SSOT prose).  
-- Models: `.cursor/ai-gateway.json` (Cloudflare AI Gateway `/compat`). Prefer program default (**grok-4.6** when pack is current).  
+- Models: hub [`.cursor/ai-gateway.json`](https://github.com/centexmsp/repository-restructuring/blob/main/.cursor/ai-gateway.json). Default **grok-4.7**, fast **grok-4.6**, long Build **grok-build-0.1**. Not Auto.  
 - Optional subagents: copy from SSOT `.cursor/agents/` only when needed.  
 - Loops: durable state in git/SSOT Continue queue — not chat history.
 
@@ -70,5 +70,5 @@ Do **not** fork program-wide status or token policy here. Extend local `docs/` o
 - **Dual-host sync system:** https://github.com/centexmsp/repository-restructuring/blob/main/docs/DUAL_HOST_SYNC_SYSTEM_SSOT.md
 - **Consumer contract:** https://github.com/centexmsp/repository-restructuring/blob/main/docs/CONSUMER_SSOT_BACKLINK_MINIMUM.md
 - **Cursor pack:** from hub run `./scripts/install-cursor-program-pack.sh` on this repo
-- **Models:** `grok/grok-4.6` (default) · `grok/grok-build-0.1` (long Build) · not Auto
+- **Models:** hub seed `grok-4.7` / `grok-4.6` · `grok-build-0.1` (long Build) · not Auto. Same file as the Cursor section.
 - **Git law:** claim branch → push → PR → both machines pull default branch after merge
