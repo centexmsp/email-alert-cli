@@ -7,7 +7,7 @@ type: page
 
 # Cloudflare entitlement catalog — `email-alert-cli`
 
-**Date:** 2026-07-30  
+**Date:** 2026-07-30 (obs + HMAC pin docs 2026-10-28)  
 **Policy:** [hub CLOUDFLARE_ENTITLEMENT_FULL_STACK_UTILIZATION_SSOT](https://github.com/centexmsp/repository-restructuring/blob/main/docs/CLOUDFLARE_ENTITLEMENT_FULL_STACK_UTILIZATION_SSOT.md)
 
 ## Purpose
@@ -26,7 +26,7 @@ Standalone **Rust HMAC producer** for hub Worker **`email-alerts`** (`POST /aler
 
 | Capability | Status | Notes |
 |------------|--------|-------|
-| SC-HMAC-EA wire | **use** | Pin hub `email-alert-hmac-v1` git rev — never fork crypto |
+| SC-HMAC-EA wire | **use** | Pin dedicated [`centexmsp/email-alert-hmac-v1`](https://github.com/centexmsp/email-alert-hmac-v1) git `rev` — never fork crypto |
 | 1Password `op://` | **use** | Session gate per hub ONEPASSWORD_CLI_SESSION_GATE |
 | credential-manager | **use (optional)** | Vault materialize paths |
 
@@ -35,7 +35,7 @@ Standalone **Rust HMAC producer** for hub Worker **`email-alerts`** (`POST /aler
 | Control | Status |
 |---------|--------|
 | CLI structured errors | **use** — no secret bodies in logs |
-| Correlation with Worker traces | **defer** — pass `X-Correlation-Id` when hub documents header (align with SC-CFOT) |
+| Correlation with Worker traces | **use** — caller-supplied JSON `correlation_id` (`--correlation-id` / `ALERT_CORRELATION_ID`). Hub `workers/email-alerts` logs that field on ingress. Do not generate ids here; do not add `cf-observability-tracing` (ADR-0057). No `X-Correlation-Id` header — the Worker join key is the JSON field. |
 
 ## Reuse
 
@@ -43,14 +43,14 @@ Standalone **Rust HMAC producer** for hub Worker **`email-alerts`** (`POST /aler
 |---------|----------|
 | Pin this CLI | Submodule/git dep for producers |
 | Worker source | Stay on hub — do not copy email-alerts |
-| HMAC crate | Hub only — bump `rev` when SC-HMAC-EA changes |
+| HMAC crate | Dedicated `email-alert-hmac-v1` repo only — bump `rev` when SC-HMAC-EA changes |
 
 ## Gaps / deferred
 
 | ID | Item |
 |----|------|
-| EAC-PIN-1 | Periodic bump of `email-alert-hmac-v1` rev after hub HMAC changes |
-| EAC-CORR-1 | Optional correlation_id flag on CLI for Worker trace join |
+| EAC-PIN-1 | Periodic bump of dedicated `email-alert-hmac-v1` `rev` after SC-HMAC-EA changes (ROADMAP step 2) |
+| EAC-CORR-1 | **shipped** — `--correlation-id` / `ALERT_CORRELATION_ID` → JSON `correlation_id` (fixtures in `tests/fixtures/`) |
 
 ## Local gates
 
