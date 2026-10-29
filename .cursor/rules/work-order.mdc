@@ -1,0 +1,12 @@
+---
+description: Work ordering — take the next item from the committed queue; state priority class, queue item, and blocked-on.
+alwaysApply: true
+---
+
+# Work order
+
+Normative text: hub [STANDARDS_SSOT.md §13](https://github.com/centexmsp/repository-restructuring/blob/main/docs/STANDARDS_SSOT.md#13-work-ordering-standard-mandatory--2026-10-21) (ADR-0059). Read it (wiki-first, `wiki_search` "Work Ordering Standard") before you choose, switch, or park work. Do not restate it here or in other files.
+
+1. Pick work from hub [`wiki/QUEUE.md`](https://github.com/centexmsp/repository-restructuring/blob/main/wiki/QUEUE.md), then this repo's `wiki/ROADMAP.md`. Slot new items; do not re-plan the queue.
+2. Respect the §13 WIP limits, usage threshold, and situations table. Never skip a quality gate to save usage.
+3. Every PR body and `wiki/HANDOFF.md` states **Priority class**, **Queue item**, and **Blocked-on**.

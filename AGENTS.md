@@ -12,7 +12,9 @@ Do **not** fork program-wide status or token policy here. Extend local `docs/` o
    https://github.com/centexmsp/repository-restructuring/blob/main/docs/NEW_CHAT_SINGLE_FILE_HANDOFF_SSOT.md  
 2. `git pull` on this repo + SSOT `main` when standards move.  
 3. Install/refresh Cursor pack from SSOT:  
-   `repository-restructuring/scripts/install-cursor-program-pack.sh "$(pwd)"`
+   `repository-restructuring/scripts/install-cursor-program-pack.sh "$(pwd)"`  
+   then delete `.cursor/rules/rf-sdr-multimodal-lab-enforcement.mdc` if the installer copied it (RF lab only).  
+4. **Work order:** next item from hub [`wiki/QUEUE.md`](https://github.com/centexmsp/repository-restructuring/blob/main/wiki/QUEUE.md), then this repo's `wiki/ROADMAP.md`; resume card: `wiki/HANDOFF.md`.
 
 ## Non-negotiables (inherit SSOT)
 
@@ -24,7 +26,7 @@ Do **not** fork program-wide status or token policy here. Extend local `docs/` o
 6. **Vendor docs first** for Cloudflare and xAI/Grok (SSOT + MCP).  
 7. **Deception / neutral public naming** when this repo has public security surfaces.  
 8. **Billing-starved Actions:** merge evidence = local `cargo fmt/clippy/test` — no Actions thrash.  
-9. **HMAC G8:** depend on hub `email-alert-hmac-v1` (`git`+`rev`); keep `.cargo/config.toml` `net.git-fetch-with-cli = true` for private hub. Do not re-implement `v1=` signing.  
+9. **HMAC G8 / SC-HMAC-EA:** pin dedicated [`centexmsp/email-alert-hmac-v1`](https://github.com/centexmsp/email-alert-hmac-v1) (`git`+`rev` in `Cargo.toml`); keep `.cargo/config.toml` `net.git-fetch-with-cli = true`. Do not re-implement `v1=` signing. Do not retarget the hub crate path.  
 10. **Exclusive lane:** M5 `m5-email-alert-cli-1h` when armed.
 
 ## Local only (edit this section)
@@ -35,7 +37,7 @@ Do **not** fork program-wide status or token policy here. Extend local `docs/` o
 - **Local verify commands:** `./scripts/verify-local.sh` (optional `--quick` / `--audit`) · or raw `cargo fmt --all -- --check` · `cargo clippy --all-targets --all-features -- -D warnings` · `cargo test --all-features`  
 - **Deploy entrypoints:** CLI only (Worker is hub `workers/email-alerts`)  
 - **HITL blockers known here:** vault fields for live HMAC smoke; spine secrets  
-- **Shared dep:** `email-alert-hmac-v1` from `centexmsp/repository-restructuring` @ pinned rev
+- **Shared dep:** `email-alert-hmac-v1` from `centexmsp/email-alert-hmac-v1` @ `Cargo.toml` `rev` (do not pin the hub crate path)
 
 ## Cursor + Grok
 

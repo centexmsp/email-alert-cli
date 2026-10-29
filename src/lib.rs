@@ -1,8 +1,8 @@
 //! HMAC v1 signing for the `email-alerts` Cloudflare Worker `POST /alert` contract.
-//! Crypto lives in hub **`email-alert-hmac-v1`** (G8); this crate re-exports the producer API
-//! and adds `op://` materialization + `AlertJson`.
+//! Crypto lives in dedicated **`centexmsp/email-alert-hmac-v1`** (SC-HMAC-EA / G8); this crate
+//! re-exports the producer API and adds `op://` materialization + `AlertJson`.
 //!
-//! SSOT: centexmsp/repository-restructuring `workers/email-alerts` + `crates/email-alert-hmac-v1`.
+//! SSOT: hub `workers/email-alerts` + pin `Cargo.toml` `rev` of `centexmsp/email-alert-hmac-v1`.
 
 use serde::Serialize;
 use thiserror::Error;
@@ -77,6 +77,14 @@ fn op_read(op_ref: &str) -> Result<String, OpReadError> {
 mod tests {
     use super::*;
 
+    fn fixture(name: &str) -> String {
+        let path = format!("{}/tests/fixtures/{name}", env!("CARGO_MANIFEST_DIR"));
+        std::fs::read_to_string(&path)
+            .unwrap_or_else(|e| panic!("read {path}: {e}"))
+            .trim()
+            .to_string()
+    }
+
     #[test]
     fn hmac_vector_matches_openssl_worker_example() {
         let secret = "s";
@@ -87,5 +95,31 @@ mod tests {
         let sig = signature_header_v1(secret, ts, body);
         assert!(sig.starts_with("v1="));
         assert!(email_alert_hmac_verify(secret, ts, body, &sig));
+    }
+
+    #[test]
+    fn alert_json_omits_correlation_id_when_none() {
+        let j = AlertJson {
+            subject: "s".into(),
+            text: "t".into(),
+            correlation_id: None,
+        };
+        assert_eq!(
+            j.to_body_string().unwrap(),
+            fixture("alert-body-without-correlation.json")
+        );
+    }
+
+    #[test]
+    fn alert_json_includes_caller_correlation_id() {
+        let j = AlertJson {
+            subject: "s".into(),
+            text: "t".into(),
+            correlation_id: Some("abc123".into()),
+        };
+        assert_eq!(
+            j.to_body_string().unwrap(),
+            fixture("alert-body-with-correlation.json")
+        );
     }
 }

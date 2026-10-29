@@ -8,6 +8,7 @@ Standalone **Rust** CLI and library: HMAC-signed `POST` to the [`email-alerts`](
 
 - Program index: <https://github.com/centexmsp/repository-restructuring/blob/main/docs/00_SSOT.md>
 - SSOT quick pointer (this repo): `docs/SSOT_POINTER.md`
+- Resume / next PR: `wiki/HANDOFF.md` · `wiki/ROADMAP.md`
 
 
 ## Program naming (hub)

@@ -6,7 +6,10 @@ Mirrors the wiki/ pattern in [`centexmsp/repository-restructuring/wiki/`](https:
 
 ## Pages
 
-(seed only — populate over time. open a PR with a new file in this directory.)
+- [`HANDOFF.md`](HANDOFF.md) — resume card
+- [`ROADMAP.md`](ROADMAP.md) — sequential small PRs
+
+(open a PR with a new file in this directory to add more.)
 
 ## Parent SSOTs (in `repository-restructuring`)
 
